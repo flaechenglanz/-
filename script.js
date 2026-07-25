@@ -14,6 +14,7 @@ const PK_PRICES = {
   gross:  { ein: 5, label: "Große Fenster" }
 };
 
+<<<<<<< HEAD
 // Zuschläge pro Fenster, je nach Größenkategorie
 const PK_SURCHARGES = {
   klein:  { dach: 1, sprossen: 0.5,   falz: 0.5 },
@@ -23,6 +24,17 @@ const PK_SURCHARGES = {
 
 // Preise für große zusammenhängende Glasflächen (Wintergarten, Schaufenster etc.), pro m²
 const PK_GLASS = { ein: 2, sprossenFix: 1 };
+=======
+// Zuschläge als feste Euro-Beträge pro Fenster, abhängig von der Größenkategorie
+const PK_SURCHARGE_AMOUNTS = {
+  klein:  { dach: 1,   sprossen: 0.5, falz: 0.5 },
+  mittel: { dach: 2,   sprossen: 1,   falz: 1 },
+  gross:  { dach: 2.5, sprossen: 1.5, falz: 1.5 }
+};
+
+// Preise für große zusammenhängende Glasflächen (Wintergarten, Schaufenster etc.), pro m²
+const PK_GLASS = { ein: 2, sprossenPercent: 0.5 };
+>>>>>>> 6f424be014d2c4d1086a0467861f7dbe20829b6d
 // Hinweis: aktuell gibt es hier keinen Falz/Rahmen/Bank-Zuschlag pro m²,
 // nur einen Sprossen-Zuschlag. Falls du auch einen Falz-Zuschlag für
 // große Flächen berechnen willst, sag Bescheid – das müsste als neues
@@ -46,6 +58,7 @@ function pkSyncDisplayFromConfig(){
   if (mindest) mindest.textContent = pkFormatEuroPlain(PK_MIN_PRICE);
 
   ["klein", "mittel", "gross"].forEach(cat => {
+<<<<<<< HEAD
     const priceLabel = document.getElementById(`pkp-price-${cat}`);
     if (priceLabel) priceLabel.textContent = pkFormatEuroPlain(PK_PRICES[cat].ein) + " beidseitig pro Fenster";
     Object.keys(PK_SURCHARGE_LABELS).forEach(key => {
@@ -58,6 +71,22 @@ function pkSyncDisplayFromConfig(){
   if (glassLabel) glassLabel.textContent = "Preis: " + pkFormatEuroPlain(PK_GLASS.ein) + "/m² (beidseitig)";
   const glassSprossenBadge = document.getElementById('pkp-glass-sprossen-fix');
   if (glassSprossenBadge) glassSprossenBadge.textContent = "+" + pkFormatEuroPlain(PK_GLASS.sprossenFix) + "/m²";
+=======
+    const anzahlTotalEl = document.getElementById(`pkp-${cat}-anzahl-total`);
+    if (anzahlTotalEl) anzahlTotalEl.textContent = pkFormatEuroPlain(PK_PRICES[cat].ein);
+    Object.keys(PK_SURCHARGE_LABELS).forEach(key => {
+      const amountEl = document.getElementById(`pkp-${cat}-${key}-amount`);
+      if (amountEl) amountEl.textContent = "+" + pkFormatEuroPlain(PK_SURCHARGE_AMOUNTS[cat][key]);
+    });
+  });
+  const wgTotalEl = document.getElementById('pkp-wg-m2-total');
+  if (wgTotalEl) wgTotalEl.textContent = pkFormatEuroPlain(PK_GLASS.ein);
+  const wgSprAmt = document.getElementById('pkp-wg-sprossen-amount');
+  if (wgSprAmt) wgSprAmt.textContent = "+" + pkFormatEuroPlain(PK_GLASS.ein * PK_GLASS.sprossenPercent);
+
+  const glassLabel = document.getElementById('pkp-glass-price-label');
+  if (glassLabel) glassLabel.textContent = "Preis: " + pkFormatEuroPlain(PK_GLASS.ein) + "/m² (beidseitig)";
+>>>>>>> 6f424be014d2c4d1086a0467861f7dbe20829b6d
 }
 
 let mapInitialized = false;
@@ -258,6 +287,16 @@ document.addEventListener('DOMContentLoaded', function(){
     return v.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " €";
   }
 
+<<<<<<< HEAD
+=======
+  // Rechnet bei jeder Eingabe live die Euro-Beträge in den kleinen Preisboxen
+  // (vor dem Anzahl-Feld und vor den "Davon..."-Feldern) neu aus.
+  function pkUpdateLiveAmounts(){
+    // Anzeige bleibt fest bei den konfigurierten Preisen pro Fenster / pro m².
+    // Die Berechnung passiert weiterhin im Hintergrund beim Klick auf "Preis berechnen".
+  }
+
+>>>>>>> 6f424be014d2c4d1086a0467861f7dbe20829b6d
   const pkCategories = ["klein", "mittel", "gross"];
   pkCategories.forEach(cat => {
     const inputAnzahl = document.getElementById(`pkp-${cat}-anzahl`);
@@ -269,6 +308,10 @@ document.addEventListener('DOMContentLoaded', function(){
         extraInput.max = val;
         if (parseInt(extraInput.value) > val) extraInput.value = val;
       });
+<<<<<<< HEAD
+=======
+      pkUpdateLiveAmounts();
+>>>>>>> 6f424be014d2c4d1086a0467861f7dbe20829b6d
     });
     Object.keys(PK_SURCHARGE_LABELS).forEach(key => {
       const extraInput = document.getElementById(`pkp-${cat}-${key}`);
@@ -276,6 +319,10 @@ document.addEventListener('DOMContentLoaded', function(){
         const currentMax = parseInt(extraInput.max || 0);
         let currentVal = parseInt(extraInput.value || 0);
         if (currentVal > currentMax) extraInput.value = currentMax;
+<<<<<<< HEAD
+=======
+        pkUpdateLiveAmounts();
+>>>>>>> 6f424be014d2c4d1086a0467861f7dbe20829b6d
       });
     });
   });
@@ -286,12 +333,24 @@ document.addEventListener('DOMContentLoaded', function(){
     const totalM2 = Math.max(0, parseInt(pkWgM2Input.value || 0));
     pkWgSprossenInput.max = totalM2;
     if (parseInt(pkWgSprossenInput.value) > totalM2) pkWgSprossenInput.value = totalM2;
+<<<<<<< HEAD
+=======
+    pkUpdateLiveAmounts();
+>>>>>>> 6f424be014d2c4d1086a0467861f7dbe20829b6d
   });
   pkWgSprossenInput.addEventListener("input", () => {
     const maxVal = parseInt(pkWgSprossenInput.max || 0);
     if (parseInt(pkWgSprossenInput.value) > maxVal) pkWgSprossenInput.value = maxVal;
+<<<<<<< HEAD
   });
 
+=======
+    pkUpdateLiveAmounts();
+  });
+
+  pkUpdateLiveAmounts();
+
+>>>>>>> 6f424be014d2c4d1086a0467861f7dbe20829b6d
   let pkpLastResult = null;
 
   function pkpHideToForm(){
@@ -325,7 +384,11 @@ document.addEventListener('DOMContentLoaded', function(){
         let extra = parseInt(document.getElementById(`pkp-${cat}-${key}`).value || 0);
         if (extra > anzahl) extra = anzahl;
         if (extra > 0){
+<<<<<<< HEAD
           const add = extra * PK_SURCHARGES[cat][key];
+=======
+          const add = extra * PK_SURCHARGE_AMOUNTS[cat][key];
+>>>>>>> 6f424be014d2c4d1086a0467861f7dbe20829b6d
           total += add;
           breakdown.push(`<div class="result-row"><span>${PK_PRICES[cat].label} · ${PK_SURCHARGE_LABELS[key]} (${extra}×)</span><span>+${pkFormatEuro(add)}</span></div>`);
           detailsLines.push(`${PK_PRICES[cat].label} ${PK_SURCHARGE_LABELS[key]}: ${extra}x (+${pkFormatEuro(add)})`);
@@ -342,7 +405,11 @@ document.addEventListener('DOMContentLoaded', function(){
       breakdown.push(`<div class="result-row"><span>Glasflächen · ${wgM2} m² Grundpreis (beidseitig)</span><span>${pkFormatEuro(glassBase)}</span></div>`);
       detailsLines.push(`Glasflächen: ${wgM2} m² (${pkFormatEuro(glassBase)})`);
       if (wgSprossenM2 > 0){
+<<<<<<< HEAD
         const sprossenAufpreis = wgSprossenM2 * PK_GLASS.sprossenFix;
+=======
+        const sprossenAufpreis = wgSprossenM2 * PK_GLASS.ein * PK_GLASS.sprossenPercent;
+>>>>>>> 6f424be014d2c4d1086a0467861f7dbe20829b6d
         total += sprossenAufpreis;
         breakdown.push(`<div class="result-row"><span>Glasflächen · Sprossen-Zuschlag (${wgSprossenM2} m²)</span><span>+${pkFormatEuro(sprossenAufpreis)}</span></div>`);
         detailsLines.push(`Glasflächen Sprossen-Zuschlag: ${wgSprossenM2} m² (+${pkFormatEuro(sprossenAufpreis)})`);
@@ -389,4 +456,8 @@ document.addEventListener('DOMContentLoaded', function(){
       window.location.href = 'kontakt.html';
     });
   }
+<<<<<<< HEAD
 })();
+=======
+})();
+>>>>>>> 6f424be014d2c4d1086a0467861f7dbe20829b6d
