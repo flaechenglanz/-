@@ -99,6 +99,7 @@ h1,h2,h3,h4{
 
 .container{ max-width:var(--max-w); margin:0 auto; padding:0 50px; }
 @media (max-width:600px){ .container{ padding:0 24px; } }
+@media (max-width:600px){ .ba-slider{ max-width:100%; flex-basis:100%; } }
 section{ position:relative; }
 .section-pad{ padding:150px 0; }
 @media (max-width:720px){ .section-pad{ padding:90px 0; } }
@@ -424,8 +425,9 @@ section{ position:relative; }
 .faq-item .faq-body p{ color:var(--ink-soft); margin:0; }
 
 /* ---------- Referenzen ---------- */
-.ba-slider-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:36px; margin:40px 0 0; }
+.ba-slider-grid{ display:flex; flex-wrap:wrap; justify-content:center; gap:36px; margin:40px 0 0; }
 .ba-slider{
+  flex:0 1 calc(33.333% - 24px); max-width:calc(33.333% - 24px); min-width:260px;
   position:relative; border-radius:var(--radius-lg); overflow:hidden;
   box-shadow:var(--shadow-card); border:2px solid var(--c-700); background:var(--c-800);
   user-select:none; -webkit-user-select:none;
@@ -527,8 +529,8 @@ section{ position:relative; }
   .social-card .btn,
   .clean-card .btn,
   .ba-slider-grid .btn{ padding:18px 28px; font-size:1.05rem; }
-  .social-proof-grid,
-  .ba-slider-grid{ grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); }
+  .social-proof-grid{ grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); }
+  .ba-slider{ max-width:calc(50% - 18px); }
 }
 /* Ab hier eigene Regel NUR für größere Tablets (iPad Pro 11"/12.9" quer usw.),
    damit sie sich nicht mit der bestehenden Einspalten-Regel bei max-width:900px beißt
