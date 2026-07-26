@@ -60,6 +60,29 @@
 </script>
 
 <link rel="stylesheet" href="style.css">
+<style>
+  /* 2x2 Grid, das auf dem Desktop ca. 25% kleiner skaliert ist */
+  .ba-slider-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    width: 100%;
+    max-width: 75%;
+    margin: 0 auto;
+  }
+
+  .ba-slider {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  @media (max-width: 768px) {
+    .ba-slider-grid {
+      grid-template-columns: 1fr;
+      max-width: 100%;
+    }
+  }
+</style>
 </head>
 <body>
 
@@ -89,11 +112,12 @@
   <section class="section-pad" style="padding:20px 0 60px;">
     <div class="container">
       <div class="ba-slider-grid">
+        
         <div class="ba-slider">
           <div class="ba-frame">
-            <img class="ba-after" src="images/ref2_vorher.jpg" alt="Vorher (Dreckig)" loading="lazy">
+            <img class="ba-after" src="images/ref1_vorher.jpg" alt="Vorher (Dreckig)" loading="lazy">
             <div class="ba-before-wrap" id="slider-wrap-1" style="clip-path:inset(0 0 0 50%); position:absolute; inset:0;">
-              <img class="ba-before" src="images/ref2_nachher.jpg" alt="Nachher (Sauber)" style="width:100%; height:100%; object-fit:cover;" loading="lazy">
+              <img class="ba-before" src="images/ref1_nachher.jpg" alt="Nachher (Sauber)" style="width:100%; height:100%; object-fit:cover;" loading="lazy">
             </div>
             <div class="ba-handle" id="slider-handle-1" style="left:50%;"></div>
             <input type="range" min="0" max="100" value="50" class="ba-range" oninput="updateSlider(this, 'slider-wrap-1', 'slider-handle-1')" style="position:absolute; inset:0; width:100%; height:100%; opacity:0; z-index:10; cursor:ew-resize;">
@@ -102,9 +126,9 @@
 
         <div class="ba-slider">
           <div class="ba-frame">
-            <img class="ba-after" src="images/ref1_vorher.jpg" alt="Vorher (Dreckig)" loading="lazy">
+            <img class="ba-after" src="images/ref2_vorher.jpg" alt="Vorher (Dreckig)" loading="lazy">
             <div class="ba-before-wrap" id="slider-wrap-2" style="clip-path:inset(0 0 0 50%); position:absolute; inset:0;">
-              <img class="ba-before" src="images/ref1_nachher.jpg" alt="Nachher (Sauber)" style="width:100%; height:100%; object-fit:cover;" loading="lazy">
+              <img class="ba-before" src="images/ref2_nachher.jpg" alt="Nachher (Sauber)" style="width:100%; height:100%; object-fit:cover;" loading="lazy">
             </div>
             <div class="ba-handle" id="slider-handle-2" style="left:50%;"></div>
             <input type="range" min="0" max="100" value="50" class="ba-range" oninput="updateSlider(this, 'slider-wrap-2', 'slider-handle-2')" style="position:absolute; inset:0; width:100%; height:100%; opacity:0; z-index:10; cursor:ew-resize;">
@@ -115,7 +139,7 @@
           <div class="ba-frame">
             <img class="ba-after" src="images/ref3_vorher.jpg" alt="Vorher (Dreckig)" loading="lazy">
             <div class="ba-before-wrap" id="slider-wrap-3" style="clip-path:inset(0 0 0 50%); position:absolute; inset:0;">
-              <img class="ba-before" src="images/ref3_nachher.jpg" alt="" style="width:100%; height:100%; object-fit:cover;" loading="lazy">
+              <img class="ba-before" src="images/ref3_nachher.jpg" alt="Nachher (Sauber)" style="width:100%; height:100%; object-fit:cover;" loading="lazy">
             </div>
             <div class="ba-handle" id="slider-handle-3" style="left:50%;"></div>
             <input type="range" min="0" max="100" value="50" class="ba-range" oninput="updateSlider(this, 'slider-wrap-3', 'slider-handle-3')" style="position:absolute; inset:0; width:100%; height:100%; opacity:0; z-index:10; cursor:ew-resize;">
@@ -133,16 +157,6 @@
           </div>
         </div>
 
-        <div class="ba-slider">
-          <div class="ba-frame">
-            <img class="ba-after" src="images/ref5_vorher.jpg" alt="Vorher (Dreckig)" loading="lazy">
-            <div class="ba-before-wrap" id="slider-wrap-5" style="clip-path:inset(0 0 0 50%); position:absolute; inset:0;">
-              <img class="ba-before" src="images/ref5_nachher.jpg" alt="Nachher (Sauber)" style="width:100%; height:100%; object-fit:cover;" loading="lazy">
-            </div>
-            <div class="ba-handle" id="slider-handle-5" style="left:50%;"></div>
-            <input type="range" min="0" max="100" value="50" class="ba-range" oninput="updateSlider(this, 'slider-wrap-5', 'slider-handle-5')" style="position:absolute; inset:0; width:100%; height:100%; opacity:0; z-index:10; cursor:ew-resize;">
-          </div>
-        </div>
       </div>
     </div>
   </section>
@@ -183,8 +197,6 @@
     </div>
   </section>
 </div>
-
-
 
 <footer class="site-footer">
   <div class="container">
