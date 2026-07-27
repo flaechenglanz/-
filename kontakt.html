@@ -14,7 +14,6 @@
 <meta name="geo.placename" content="Löhne">
 <link rel="canonical" href="https://flaechenglanz.github.io/service/kontakt.html">
 
-<!-- Open Graph / Social Media Vorschau -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Flächenglanz Service">
 <meta property="og:title" content="Kontakt | Flächenglanz Service">
@@ -64,6 +63,33 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <link rel="stylesheet" href="style.css">
+<style>
+  /* Styling für das Ausklapp-Element nach Bild-Vorlage */
+  details.bewertung-accordion summary::-webkit-details-marker,
+  details.bewertung-accordion summary::marker {
+    display: none !important;
+    content: "" !important;
+  }
+  details.bewertung-accordion summary {
+    list-style: none !important;
+    outline: none;
+  }
+  details.bewertung-accordion[open] .toggle-plus {
+    display: none !important;
+  }
+  details.bewertung-accordion:not([open]) .toggle-minus {
+    display: none !important;
+  }
+
+  /* Hover-Effekt wie bei den anderen Karten */
+  details.bewertung-accordion {
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+  details.bewertung-accordion:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 12px 28px rgba(14, 165, 233, 0.2);
+  }
+</style>
 </head>
 <body>
 
@@ -91,101 +117,117 @@
   </section>
 
   <section class="section-pad" style="padding:20px 0 60px;">
-    <div class="container contact-layout">
-      <div class="glass-card contact-card">
-        <p style="color:var(--ink-soft); margin-bottom: 30px;">Prüfen Sie einfach, ob Sie sich im Umkreis von circa 5 km befinden, und geben Sie dann Ihren Namen sowie Ihre Kontaktdaten an und schreiben Sie eine kurze Nachricht:</p>
-
-        <form action="https://api.web3forms.com/submit" method="POST">
-          <input type="hidden" name="access_key" value="fd33b441-0dfe-420f-97c4-08a929ab825f">
-          <input type="hidden" name="subject" value="Neue Kontaktanfrage über Flächenglanz Service">
-          <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
-          <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" id="name" name="Name" required>
-          </div>
-          <div class="form-group">
-            <label for="email">E-Mail</label>
-            <input type="email" id="email" name="E-Mail" required>
-          </div>
-          <div class="form-group">
-            <label for="adresse">Adresse</label>
-            <input type="text" id="adresse" name="Adresse" required>
-          </div>
-          <div class="form-group">
-            <label for="termin">Gewünschter Termin</label>
-            <input type="text" id="termin" name="Gewünschter Termin" required>
-          </div>
-
-          <div class="form-group">
-            <label>Preisberechnung (optional)</label>
-
-            <button type="button" class="pk-status-btn pending" id="pk-status-btn" onclick="openPreisrechnerFromForm()">
-              <div class="pk-status-icon" id="pk-status-icon">!</div>
-              <div class="pk-status-text">
-                <strong id="pk-status-title">Preis noch nicht berechnet</strong>
-                <span id="pk-status-sub">Klicken, um den Preisrechner zu öffnen</span>
-              </div>
-              <span class="pk-status-arrow">›</span>
-            </button>
-
-            <input type="hidden" id="preis-ergebnis" name="Berechneter Preis">
-            <input type="hidden" id="preis-details" name="Preis-Details">
-          </div>
-
-          <div class="form-group">
-            <label for="gefunden">Wie haben Sie von mir erfahren/mich gefunden? (optional)</label>
-            <input type="text" id="gefunden" name="Wie gefunden">
-          </div>
-
-          <div class="form-group">
-            <label for="nachricht">Sonstige Infos und Fragen (optional)
-               </label>
-            <textarea id="nachricht" name="Nachricht" rows="5" placeholder=" "></textarea>
-          </div>
-
-          <div class="form-group">
-            <label style="display:flex; align-items:flex-start; gap:10px; font-weight:600; cursor:pointer;">
-              <input type="checkbox" id="datenschutz-check" required style="width:auto; margin-top:4px;">
-              <span>Ich habe die <a href="impressum-datenschutz.html#datenschutz" target="_blank" rel="noopener" style="text-decoration:underline;">Datenschutzerklärung</a> gelesen und bin mit der Verarbeitung meiner Daten einverstanden.</span>
-            </label>
-          </div>
-
-          <button type="submit" class="btn btn-primary" style="width:100%;">Anfrage senden</button>
-        </form>
-
-        <p style="text-align:center; margin-top:30px; color:var(--ink-soft); font-size:1.2rem;">Alternativ können Sie mich auch direkt anrufen unter der Nummer:</p>
-        <div style="text-align:center;">
-          <a href="tel:+491627484659" class="phone-pill">📞 +49 162 7484659 📞</a>
-        </div>
-      </div>
-
-      <div>
-        <div class="glass-card" style="margin-bottom: 20px; padding: 20px 25px;">
-          <p style="color:var(--ink-soft); margin:0;"> Einfach Adresse in der Suchleiste angeben und direkt sehen, ob Sie in meiner Reichweite liegen, sodass ich Sie für Ihren Auftrag erreichen kann. </p>
-        </div>
-        <div class="map-frame">
-          <div id="radius-map" style="width: 100%; height: 550px; z-index: 1;"></div>
-        </div>
+    <div class="container">
+      
+      <div class="contact-layout" style="display: flex; gap: 30px; align-items: flex-start;">
         
-        <div class="hours-box">
-          <div class="eyebrow" style="margin-bottom: 10px;">Erreichbarkeit</div>
-          <h2 style="font-size: 1.4rem; font-weight: 700;">Wann habe ich Zeit?</h2>
-          <p style="color:var(--ink-soft); margin-top:12px;">1. Bis einschließlich Dienstag, den 1. September 2026 (Sommerferien in NRW), bin ich Ihnen an jedem Tag der Woche ganztägig ab 8 Uhr verfügbar. <br>2. Für Termine ab Mittwoch, den 2. September 2026, stehe ich aufgrund des Schulbeginns werktags ab 14 Uhr und am Wochenende ab 10 Uhr zur Verfügung.</p>
+        <div style="flex: 1;">
+          <div class="glass-card contact-card">
+            <p style="color:var(--ink-soft); margin-bottom: 25px;">Prüfen Sie einfach, ob Sie sich im Umkreis von circa 5 km befinden, und geben Sie dann Ihren Namen sowie Ihre Kontaktdaten an und schreiben Sie eine kurze Nachricht:</p>
+
+            <form action="https://api.web3forms.com/submit" method="POST">
+              <input type="hidden" name="access_key" value="fd33b441-0dfe-420f-97c4-08a929ab825f">
+              <input type="hidden" name="subject" value="Neue Kontaktanfrage über Flächenglanz Service">
+              <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+              <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="Name" required>
+              </div>
+              <div class="form-group">
+                <label for="email">E-Mail</label>
+                <input type="email" id="email" name="E-Mail" required>
+              </div>
+              <div class="form-group">
+                <label for="adresse">Adresse</label>
+                <input type="text" id="adresse" name="Adresse" required>
+              </div>
+              <div class="form-group">
+                <label for="termin">Gewünschter Termin</label>
+                <input type="text" id="termin" name="Gewünschter Termin" required>
+              </div>
+
+              <div class="form-group">
+                <label for="gefunden">Wie haben Sie von mir erfahren/mich gefunden? (optional)</label>
+                <input type="text" id="gefunden" name="Wie gefunden">
+              </div>
+
+              <div class="form-group">
+                <label for="nachricht">Sonstige Infos und Fragen (optional)</label>
+                <textarea id="nachricht" name="Nachricht" rows="1" placeholder=" " style="resize:none; overflow-y:hidden; min-height:42px;" oninput="this.style.height='auto'; this.style.height=this.scrollHeight+'px';"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label>Preisberechnung (optional)</label>
+                <button type="button" class="pk-status-btn pending" id="pk-status-btn" onclick="openPreisrechnerFromForm()" style="display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 16px; background: rgba(14, 165, 233, 0.1); border: 1px solid rgba(14, 165, 233, 0.3); border-radius: 10px; cursor: pointer; text-align: left; transition: all 0.2s ease;">
+                  <div class="pk-status-icon" id="pk-status-icon" style="font-weight: bold; color: #0ea5e9; font-size: 1.1rem;">!</div>
+                  <div class="pk-status-text" style="flex: 1;">
+                    <strong id="pk-status-title" style="display: block; color: var(--ink-main, #1e293b); font-size: 0.95rem;">Preis noch nicht berechnet</strong>
+                    <span id="pk-status-sub" style="display: block; color: var(--ink-soft, #64748b); font-size: 0.85rem;">Klicken, um den Preisrechner zu öffnen</span>
+                  </div>
+                  <span class="pk-status-arrow" style="font-size: 1.3rem; color: #0ea5e9;">›</span>
+                </button>
+                <input type="hidden" id="preis-ergebnis" name="Berechneter Preis">
+                <input type="hidden" id="preis-details" name="Preis-Details">
+              </div>
+
+              <div class="form-group">
+                <label style="display:flex; align-items:flex-start; gap:10px; font-weight:600; cursor:pointer;">
+                  <input type="checkbox" id="datenschutz-check" required style="width:auto; margin-top:4px;">
+                  <span>Ich habe die <a href="impressum-datenschutz.html#datenschutz" target="_blank" rel="noopener" style="text-decoration:underline;">Datenschutzerklärung</a> gelesen und bin mit der Verarbeitung meiner Daten einverstanden.</span>
+                </label>
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="width:100%;">Anfrage senden</button>
+            </form>
+          </div>
         </div>
 
-        <div class="glass-card" style="margin-top: 20px; padding: 25px;">
-          <div class="eyebrow" style="margin-bottom: 10px;">Bereits bekannt?</div>
-          <h2 style="font-size: 1.4rem; font-weight: 700;">Ich war schon einmal bei ihnen?</h2>
-          <p style="color:var(--ink-soft); margin: 12px 0 1.5em; line-height: 1.6;">
-            Dann verfassen Sie doch einfach und schnell Ihre eigene Google-Bewertung, und wenn Ihnen meine Arbeit gefallen hat, empfehlen Sie mich doch gerne an Ihre Freunde, Nachbarn, Familie oder andere Bekannte weiter, oder kontaktieren Sie mich erneut, wenn es mal wieder Zeit für eine Reinigung Ihrer Fenster wird.<br>Bis dahin viele Grüße von Ihrem Flächenglanz Service!
-          </p>
-          <a href="https://g.page/r/CRSNlhS5OFIdEAE/review" target="_blank" rel="noopener" class="btn btn-primary">Google Bewertung verfassen</a>
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+          
+          <div class="glass-card" style="padding: 20px 25px; margin: 0; overflow: hidden;">
+            <p style="color:var(--ink-soft); margin:0 0 15px 0;">Einfach Adresse in der Suchleiste angeben und direkt sehen, ob Sie in meiner Reichweite liegen, sodass ich Sie für Ihren Auftrag erreichen kann.</p>
+            <div class="map-frame" style="border-radius: 12px; overflow: hidden;">
+              <div id="radius-map" style="width: 100%; height: 320px; z-index: 1;"></div>
+            </div>
+          </div>
+          
+          <div class="hours-box" style="margin: 0;">
+            <div class="eyebrow" style="margin-bottom: 8px;">Erreichbarkeit</div>
+            <h2 style="font-size: 1.3rem; font-weight: 700;">Wann habe ich Zeit?</h2>
+            <p style="color:var(--ink-soft); margin-top:10px; font-size: 0.95rem; line-height: 1.5;">1. Bis einschließlich Dienstag, den 1. September 2026 (Sommerferien in NRW), bin ich Ihnen an jedem Tag der Woche ganztägig ab 8 Uhr verfügbar.<br>2. Für Termine ab Mittwoch, den 2. September 2026, stehe ich aufgrund des Schulbeginns werktags ab 14 Uhr und am Wochenende ab 10 Uhr zur Verfügung.</p>
+          </div>
+
+          <div class="glass-card" style="padding: 20px; margin: 0; text-align: center;">
+            <div style="font-size: 1.15rem; font-weight: 700; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-main, #1e293b);">Direkter Kontakt</div>
+            <p style="color:var(--ink-soft); margin-bottom: 12px; font-size:1rem;">Alternativ können Sie mich auch direkt anrufen unter der Nummer:</p>
+            <div style="text-align:center;">
+              <a href="tel:+491627484659" class="phone-pill">📞 +49 162 7484659 📞</a>
+            </div>
+          </div>
+
+          <details class="bewertung-accordion" style="width: 100%; background: #bee0ff; border-radius: 16px; padding: 18px 24px; cursor: pointer; border: 1px solid #0ea5e9;">
+            <summary style="font-size: 1.2rem; font-weight: 800; color: #000000; display: flex; justify-content: space-between; align-items: center; user-select: none;">
+              <span>Ich war schon einmal bei Ihnen?</span>
+              
+              <div class="toggle-plus" style="width: 32px; height: 32px; background: #4ba3e3; color: #000000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: bold; line-height: 1; flex-shrink: 0;">+</div>
+              <div class="toggle-minus" style="width: 32px; height: 32px; background: #4ba3e3; color: #000000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: bold; line-height: 1; flex-shrink: 0;">−</div>
+            </summary>
+            
+            <div style="margin-top: 15px; text-align: center; cursor: default; border-top: 1px solid rgba(14, 165, 233, 0.3); padding-top: 15px;">
+              <p style="color: #1e293b; margin: 0 0 15px 0; line-height: 1.5; font-size: 0.95rem;">
+                Dann verfassen Sie doch einfach und schnell Ihre eigene Google-Bewertung, und wenn Ihnen meine Arbeit gefallen hat, empfehlen Sie mich doch gerne an Ihre Freunde, Nachbarn, Familie oder andere Bekannte weiter, oder kontaktieren Sie mich erneut, wenn es mal wieder Zeit für eine Reinigung Ihrer Fenster wird.<br>Bis dahin viele Grüße von Ihrem Flächenglanz Service!
+              </p>
+              <a href="https://g.page/r/CRSNlhS5OFIdEAE/review" target="_blank" rel="noopener" class="btn btn-primary" style="display: inline-block;">Google Bewertung verfassen</a>
+            </div>
+          </details>
+
         </div>
+
       </div>
+
     </div>
   </section>
 </div>
-
 
 <footer class="site-footer">
   <div class="container">
