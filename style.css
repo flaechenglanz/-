@@ -620,7 +620,7 @@ section{ position:relative; }
 .pk-embed .window-item{ border:2px solid var(--c-700); border-radius:12px; padding:22px; margin-bottom:18px; background:var(--c-900); color:var(--ink); }
 .pk-embed .window-item:last-child{ margin-bottom:0; }
 .pk-embed .window-title{ display:flex; align-items:center; gap:12px; margin-bottom:8px; }
-.pk-embed .window-icon{ width:34px; height:34px; border-radius:9px; background:var(--c-400); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.pk-embed .window-icon{ width:34px; height:34px; border-radius:99px; background:var(--c-400); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
 .pk-embed .window-icon svg{ width:20px; height:20px; stroke:#fff; }
 .pk-embed .window-title strong{ font-size:1.05rem; color:var(--ink); font-weight:800; font-family:var(--font-display); }
 .pk-embed .window-desc{ font-size:.9rem; color:var(--ink-soft); margin:0 0 8px 46px; font-weight:600; }
@@ -661,86 +661,49 @@ section{ position:relative; }
 .pk-embed .pk-calc-button:hover{ background:var(--c-500); transform:translateY(-3px) scale(1.01); }
 .pk-embed .result-card{ display:none; background:var(--c-900); color:var(--ink); border-radius:var(--radius-lg); padding:28px; box-shadow:var(--shadow-soft); border:3px solid var(--c-400); margin-top:26px; }
 .pk-embed .result-card.visible{ display:block; }
-.pk-embed .result-card h4{ margin:0 0 6px; font-size:13px; text-transform:uppercase; letter-spacing:.1em; color:var(--ink); font-weight:800; font-family:var(--font-display); }
-.pk-embed .result-total{ font-size:2.4rem; font-weight:800; margin:6px 0 18px; color:var(--ink); font-family:var(--font-display); }
-.pk-embed .result-breakdown{ border-top:2px solid var(--c-700); padding-top:16px; display:flex; flex-direction:column; gap:10px; }
-.pk-embed .result-row{ display:flex; justify-content:space-between; font-size:.92rem; color:var(--ink); font-weight:700; }
-.pk-embed .result-row span:last-child{ font-weight:900; }
-.pk-embed .result-empty{ font-size:.92rem; color:var(--ink); margin-top:8px; font-weight:700; }
-.pk-embed .pk-required-hint{ display:none; color:#b42318; font-weight:700; font-size:.9rem; margin-top:10px; }
-.pk-embed .pk-required-hint.visible{ display:block; }
-@media (max-width:580px){ .pk-embed .window-desc, .pk-embed .window-price, .pk-embed .window-controls, .pk-embed .extras-box{ margin-left:0; } }
+.pk-embed .result-card h4{ margin:0 0 6px; font-size:13px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink); font-family:var(--font-display); font-weight:800; }
 
-/* ---------- Status-Button Preisrechner im Kontaktformular ---------- */
-.pk-status-btn{
-  display:flex; align-items:center; gap:18px; width:100%; text-align:left;
-  background:var(--c-800); border:2px solid var(--c-700); border-radius:14px;
-  padding:18px 20px; cursor:pointer; font-family:var(--font-body);
-  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease;
-}
-.pk-status-btn:hover{ transform:translateY(-2px); box-shadow:var(--shadow-card); border-color:var(--c-400); }
-.pk-status-btn.done{ border-color:#1a7f37; background:#eaf7ee; }
-.pk-status-btn.pending{ border-color:#b42318; background:#fdecec; }
-.pk-status-icon{
-  width:44px; height:44px; border-radius:50%; flex-shrink:0;
-  display:flex; align-items:center; justify-content:center;
-  font-weight:900; font-size:22px; font-family:var(--font-display); color:#fff;
-  background:#b42318;
-}
-.pk-status-btn.done .pk-status-icon{ background:#1a7f37; }
-.pk-status-text{ display:flex; flex-direction:column; gap:2px; flex:1; min-width:0; }
-.pk-status-text strong{ font-size:1.05rem; color:var(--ink); font-family:var(--font-display); font-weight:800; }
-.pk-status-text span{ font-size:.9rem; color:var(--ink-soft); font-weight:600; }
-.pk-status-arrow{ font-size:32px; color:var(--ink-soft); font-weight:700; line-height:1; }
-.pk-required-hint{ display:none; color:#b42318; font-weight:700; font-size:.9rem; margin-top:10px; }
-.pk-required-hint.visible{ display:block; }
-
-/* ---------- Übernehmen-Button (Standalone-Preisrechner) ---------- */
-.pk-embed .pk-to-form-btn{
-  display:none; width:100%; margin-top:18px; padding:18px;
-  background:#1a7f37; color:#fff; border:2px solid transparent; border-radius:999px;
-  font-size:1.1rem; font-weight:800; font-family:var(--font-display); cursor:pointer;
-  box-shadow:0 12px 26px -10px rgba(26,127,55,.5);
-  transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
-}
-.pk-embed .pk-to-form-btn.visible{ display:block; }
-.pk-embed .pk-to-form-btn:hover{ background:#166a2d; transform:translateY(-3px) scale(1.01); }
-
-/* ---------- Google-Bewertungskarte (langgezogen, volle Breite) ---------- */
-.social-card-wide{
-  display:flex;
-  align-items:stretch;
-  text-align:left;
-}
-.social-card-wide .social-banner{
-  width:340px;
-  min-width:340px;
-  height:auto;
-}
-.social-card-wide .social-banner img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-.social-card-wide .social-body{
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  gap:6px;
-}
-@media (max-width:720px){
-  .social-card-wide{ flex-direction:column; }
-  .social-card-wide .social-banner{ width:100%; min-width:0; height:200px; }
+/* ---------- Allgemeiner Hover-Effekt (Scale-Up) ---------- */
+/* Macht Karten & interaktive Elemente leicht größer beim Drüberfahren, ohne Layout oder Farben zu verändern */
+.clean-card,
+.glass-card,
+.pricecalc-card,
+.social-card,
+.faq-item,
+.ba-slider,
+.hours-box,
+.map-frame,
+.check-list li,
+.hero-badge,
+.hero-photo,
+.why-photo img,
+.about-grid img {
+  transition: transform 0.25s ease, box-shadow 0.25s ease !important;
 }
 
-/* Startseite: "Warum mich wählen" & "Über mich"-Bilder wirken im iPad-Bereich (721-1366px) zu klein,
-   da dort weiterhin die 2-spaltige PC-Aufteilung mit 80px-Gap genutzt wird. Auf Tablets stattdessen
-   wie auf dem Handy einspaltig darstellen, damit die Bilder groß und klar zu sehen sind. */
-@media (min-width:721px) and (max-width:1366px){
-  .why-grid{ grid-template-columns:1fr; gap:40px; }
-  .why-photo img{ transform:none; max-width:520px; margin:0 auto; }
-  .why-photo img:hover{ transform:scale(1.02); }
-  .about-grid{ grid-template-columns:1fr; gap:40px; }
-  .about-grid img{ transform:none; max-width:520px; margin:0 auto; display:block; }
-  .about-grid img:hover{ transform:scale(1.02); }
+.clean-card:hover,
+.glass-card:hover,
+.pricecalc-card:hover,
+.social-card:hover,
+.faq-item:hover,
+.ba-slider:hover,
+.hours-box:hover,
+.map-frame:hover,
+.check-list li:hover,
+.hero-badge:hover {
+  transform: scale(1.025) !important;
+  box-shadow: 0 18px 40px -10px rgba(12, 45, 70, 0.35) !important;
+}
+
+/* Bild-Hover für rotierte/spezielle Bilder */
+.hero-photo:hover {
+  transform: rotate(2.5deg) scale(1.03) !important;
+}
+
+.why-photo img:hover {
+  transform: rotate(-2deg) scale(1.03) !important;
+}
+
+.about-grid img:hover {
+  transform: rotate(2deg) scale(1.03) !important;
 }
