@@ -713,45 +713,25 @@ section{ position:relative; }
 
 
 /* ==========================================================================
-   SPEZIELLE ANPASSUNG FÜR IPAD / TABLET (768px bis 1199px)
-   PC- und Smartphone-Ansichten bleiben 100% unverändert!
+   SPEZIELLE ANPASSUNG FÜR IPAD / TABLET
+   PC- und Smartphone-Ansichten bleiben zu 100% unverändert!
    ========================================================================== */
-@media screen and (min-width: 768px) and (max-width: 1199px) {
+@media screen and (max-width: 1199px) and (min-width: 768px) {
 
-  /* 1. STARTSEITE: Erst das Bild (groß), danach der Text */
+  /* 1. STARTSEITE: Bild erzwingen DARAUBER zu stehen (column-reverse dreht Bild nach oben) */
   .why-grid, 
   .about-grid {
     display: flex !important;
-    flex-direction: column !important;
+    flex-direction: column-reverse !important; /* Dreht Bild nach OGEN und Text nach UNTEN */
     align-items: center !important;
   }
 
-  /* Warum-mich-wählen: Bild explizit zuerst (order: 1) */
-  .why-photo {
-    order: 1 !important;
-    width: 100% !important;
-    max-width: 650px !important;
-    margin-bottom: 24px !important;
-  }
-
-  /* Warum-mich-wählen: Vorteile/Text explizit darunter (order: 2) */
-  .why-content {
-    order: 2 !important;
-    width: 100% !important;
-  }
-
-  /* Über mich: Bild zuerst (order: 1) */
+  /* Bilder ("Warum mich wählen" & "Über mich") */
+  .why-photo, 
   .about-photo {
-    order: 1 !important;
     width: 100% !important;
     max-width: 650px !important;
     margin-bottom: 24px !important;
-  }
-
-  /* Über mich: Text darunter (order: 2) */
-  .about-text {
-    order: 2 !important;
-    width: 100% !important;
   }
 
   .why-photo img, 
@@ -761,8 +741,14 @@ section{ position:relative; }
     display: block !important;
   }
 
+  /* Texte unter den Bildern */
+  .why-content, 
+  .about-text {
+    width: 100% !important;
+  }
 
-  /* 2. REFERENZEN: Karten-Bilder füllen Box oben voll aus & kleinerer Abstand zum Text */
+
+  /* 2. REFERENZEN: Karten-Bilder füllen Box oben voll aus & minimaler Abstand zum Text */
   .social-card {
     padding: 0 !important;
     overflow: hidden !important;
