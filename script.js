@@ -23,10 +23,6 @@ const PK_SURCHARGE_AMOUNTS = {
 
 // Preise für große zusammenhängende Glasflächen (Wintergarten, Schaufenster etc.), pro m²
 const PK_GLASS = { ein: 2, sprossenPercent: 0.5 };
-// Hinweis: aktuell gibt es hier keinen Falz/Rahmen/Bank-Zuschlag pro m²,
-// nur einen Sprossen-Zuschlag. Falls du auch einen Falz-Zuschlag für
-// große Flächen berechnen willst, sag Bescheid – das müsste als neues
-// Eingabefeld in preisrechner.html ergänzt werden.
 
 const PK_SURCHARGE_LABELS = {
   dach: "Dachfenster-Zuschlag",
@@ -38,9 +34,7 @@ function pkFormatEuroPlain(v){
   return v.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " €";
 }
 
-// Überträgt die Werte oben automatisch in die sichtbaren Texte auf
-// preisrechner.html (Grundpreis-Anzeige, Zuschlag-Badges, Mindestpreis-Hinweis),
-// damit Anzeige und Berechnung nie auseinanderlaufen.
+// Überträgt die Werte oben automatisch in die sichtbaren Texte auf preisrechner.html
 function pkSyncDisplayFromConfig(){
   const mindest = document.getElementById('pkp-note-mindestpreis');
   if (mindest) mindest.textContent = pkFormatEuroPlain(PK_MIN_PRICE);
@@ -131,9 +125,6 @@ function buildMap() {
 
 let revealObserver = null;
 
-// Ordnet jeder Seite die Elemente zu, die die Scroll-Einblendung bekommen sollen.
-// Startseite hat die Klasse "reveal" bereits direkt im HTML gesetzt,
-// bei den anderen Seiten wird sie hier automatisch ergänzt.
 const revealSelectorsByPage = {
   leistungen: ['.clean-grid > *', '.pricecalc-card', '.faq-list > *'],
   referenzen: ['.ba-slider-grid > *', '.social-proof-grid > *'],
@@ -210,10 +201,65 @@ function updatePreisStatus(){
   }
 }
 
-// Von der Kontaktseite aus zum Preisrechner wechseln (echte Unterseite)
+// Von der Kontaktseite aus zum Preisrechner wechseln
 function openPreisrechnerFromForm(){
   sessionStorage.setItem('pkReturnToKontakt', '1');
   window.location.href = 'preisrechner.html';
+}
+
+// ---------- Speichern & Wiederherstellen der Formular-Eingaben ----------
+const PK_INPUT_IDS = [
+  'pkp-klein-anzahl', 'pkp-klein-dach', 'pkp-klein-sprossen', 'pkp-klein-falz',
+  'pkp-mittel-anzahl', 'pkp-mittel-dach', 'pkp-mittel-sprossen', 'pkp-mittel-falz',
+  'pkp-gross-anzahl', 'pkp-gross-dach', 'pkp-gross-sprossen', 'pkp-gross-falz',
+  'pkp-wg-m2-input', 'pkp-wg-sprossen-slider'
+];
+
+function pkSaveInputs() {
+  const inputs = {};
+  PK_INPUT_IDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) inputs[id] = el.value;
+  });
+  sessionStorage.setItem('pkSavedInputs', JSON.stringify(inputs));
+}
+
+function pkRestoreInputs() {
+  const saved = sessionStorage.getItem('pkSavedInputs');
+  if (!saved) return false;
+  try {
+    const inputs = JSON.parse(saved);
+    let hasValue = false;
+    PK_INPUT_IDS.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && inputs[id] !== undefined) {
+        el.value = inputs[id];
+        if (parseFloat(inputs[id]) > 0) hasValue = true;
+      }
+    });
+
+    // Maxima für Unter-Felder entsprechend aktualisieren
+    ["klein", "mittel", "gross"].forEach(cat => {
+      const inputAnzahl = document.getElementById(`pkp-${cat}-anzahl`);
+      if (inputAnzahl) {
+        const val = Math.max(0, parseInt(inputAnzahl.value || 0));
+        Object.keys(PK_SURCHARGE_LABELS).forEach(key => {
+          const extraInput = document.getElementById(`pkp-${cat}-${key}`);
+          if (extraInput) extraInput.max = val;
+        });
+      }
+    });
+    const pkWgM2Input = document.getElementById("pkp-wg-m2-input");
+    const pkWgSprossenInput = document.getElementById("pkp-wg-sprossen-slider");
+    if (pkWgM2Input && pkWgSprossenInput) {
+      const totalM2 = Math.max(0, parseInt(pkWgM2Input.value || 0));
+      pkWgSprossenInput.max = totalM2;
+    }
+
+    return hasValue;
+  } catch(e) {
+    return false;
+  }
 }
 
 // ---------- Seiten-Setup beim Laden ----------
@@ -241,7 +287,6 @@ document.addEventListener('DOMContentLoaded', function(){
         if (hiddenTotal) hiddenTotal.value = data.total;
         if (hiddenDetails) hiddenDetails.value = data.details;
       } catch (e) {}
-      sessionStorage.removeItem('pkPendingResult');
     }
   }
 
@@ -254,17 +299,8 @@ document.addEventListener('DOMContentLoaded', function(){
   const embed = document.getElementById('pkp-embed');
   if (!embed) return;
 
-  // Preise kommen jetzt zentral von oben (PK_PRICES, PK_SURCHARGES, PK_GLASS, PK_MIN_PRICE, PK_SURCHARGE_LABELS)
-
   function pkFormatEuro(v){
     return v.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " €";
-  }
-
-  // Rechnet bei jeder Eingabe live die Euro-Beträge in den kleinen Preisboxen
-  // (vor dem Anzahl-Feld und vor den "Davon..."-Feldern) neu aus.
-  function pkUpdateLiveAmounts(){
-    // Anzeige bleibt fest bei den konfigurierten Preisen pro Fenster / pro m².
-    // Die Berechnung passiert weiterhin im Hintergrund beim Klick auf "Preis berechnen".
   }
 
   const pkCategories = ["klein", "mittel", "gross"];
@@ -278,7 +314,7 @@ document.addEventListener('DOMContentLoaded', function(){
         extraInput.max = val;
         if (parseInt(extraInput.value) > val) extraInput.value = val;
       });
-      pkUpdateLiveAmounts();
+      pkSaveInputs();
     });
     Object.keys(PK_SURCHARGE_LABELS).forEach(key => {
       const extraInput = document.getElementById(`pkp-${cat}-${key}`);
@@ -286,26 +322,26 @@ document.addEventListener('DOMContentLoaded', function(){
         const currentMax = parseInt(extraInput.max || 0);
         let currentVal = parseInt(extraInput.value || 0);
         if (currentVal > currentMax) extraInput.value = currentMax;
-        pkUpdateLiveAmounts();
+        pkSaveInputs();
       });
     });
   });
 
   const pkWgM2Input = document.getElementById("pkp-wg-m2-input");
   const pkWgSprossenInput = document.getElementById("pkp-wg-sprossen-slider");
-  pkWgM2Input.addEventListener("input", () => {
-    const totalM2 = Math.max(0, parseInt(pkWgM2Input.value || 0));
-    pkWgSprossenInput.max = totalM2;
-    if (parseInt(pkWgSprossenInput.value) > totalM2) pkWgSprossenInput.value = totalM2;
-    pkUpdateLiveAmounts();
-  });
-  pkWgSprossenInput.addEventListener("input", () => {
-    const maxVal = parseInt(pkWgSprossenInput.max || 0);
-    if (parseInt(pkWgSprossenInput.value) > maxVal) pkWgSprossenInput.value = maxVal;
-    pkUpdateLiveAmounts();
-  });
-
-  pkUpdateLiveAmounts();
+  if (pkWgM2Input && pkWgSprossenInput) {
+    pkWgM2Input.addEventListener("input", () => {
+      const totalM2 = Math.max(0, parseInt(pkWgM2Input.value || 0));
+      pkWgSprossenInput.max = totalM2;
+      if (parseInt(pkWgSprossenInput.value) > totalM2) pkWgSprossenInput.value = totalM2;
+      pkSaveInputs();
+    });
+    pkWgSprossenInput.addEventListener("input", () => {
+      const maxVal = parseInt(pkWgSprossenInput.max || 0);
+      if (parseInt(pkWgSprossenInput.value) > maxVal) pkWgSprossenInput.value = maxVal;
+      pkSaveInputs();
+    });
+  }
 
   let pkpLastResult = null;
 
@@ -315,13 +351,14 @@ document.addEventListener('DOMContentLoaded', function(){
     pkpLastResult = null;
   }
 
-  // Reset bei jeder Änderung
   embed.addEventListener('input', function(e){
     if (e.target.id === 'pkp-calc-btn' || e.target.id === 'pkp-to-form-btn') return;
     pkpHideToForm();
+    pkSaveInputs();
   });
 
   function pkCalculatePrice(){
+    pkSaveInputs();
     let total = 0;
     let hasWindows = false;
     const breakdown = [];
@@ -393,15 +430,22 @@ document.addEventListener('DOMContentLoaded', function(){
     card.scrollIntoView({behavior:"smooth", block:"center"});
   }
 
-  document.getElementById("pkp-calc-btn").addEventListener("click", pkCalculatePrice);
+  const calcBtn = document.getElementById("pkp-calc-btn");
+  if (calcBtn) calcBtn.addEventListener("click", pkCalculatePrice);
 
   const toFormBtn = document.getElementById("pkp-to-form-btn");
   if (toFormBtn){
     toFormBtn.addEventListener("click", function(){
       if (!pkpLastResult) return;
+      pkSaveInputs();
       sessionStorage.setItem('pkPendingResult', JSON.stringify(pkpLastResult));
       sessionStorage.removeItem('pkReturnToKontakt');
       window.location.href = 'kontakt.html';
     });
+  }
+
+  // Beim Aufrufen des Preisrechners zuvor gespeicherte Werte wiederherstellen & neu berechnen
+  if (pkRestoreInputs()) {
+    pkCalculatePrice();
   }
 })();
