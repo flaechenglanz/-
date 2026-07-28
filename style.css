@@ -707,3 +707,43 @@ section{ position:relative; }
 .about-grid img:hover {
   transform: rotate(2deg) scale(1.03) !important;
 }
+
+
+
+
+
+/* ==========================================================================
+   NUR FÜR IPADS / TABLETS (Zwischen 768px und 1024px Breite)
+   PC- und Smartphone-Ansicht bleiben zu 100% unverändert.
+   ========================================================================== */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+
+  /* 1. Startseite: Erst das Bild, darunter der Text */
+  .why-grid, 
+  .about-grid {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .why-photo, 
+  .about-photo {
+    order: 1 !important;
+    margin-bottom: 24px !important;
+    width: 100% !important;
+  }
+
+  .why-content, 
+  .about-text {
+    order: 2 !important;
+    width: 100% !important;
+  }
+
+  /* 2. Referenzen: Abstand zwischen Bild und Text in den Social-Karten verringern */
+  .social-card .social-photo {
+    margin-bottom: 12px !important;
+  }
+  
+  .social-card .social-body {
+    padding-top: 0 !important;
+  }
+}
