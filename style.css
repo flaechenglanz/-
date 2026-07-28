@@ -718,7 +718,7 @@ section{ position:relative; }
    ========================================================================== */
 @media screen and (min-width: 768px) and (max-width: 1199px) {
 
-  /* 1. STARTSEITE: Zuerst das Bild (größer), danach der Text */
+  /* 1. STARTSEITE: Erst das Bild (groß), danach der Text */
   .why-grid, 
   .about-grid {
     display: flex !important;
@@ -726,13 +726,32 @@ section{ position:relative; }
     align-items: center !important;
   }
 
-  /* Bild "Warum mich wählen" & Logo */
-  .why-photo, 
+  /* Warum-mich-wählen: Bild explizit zuerst (order: 1) */
+  .why-photo {
+    order: 1 !important;
+    width: 100% !important;
+    max-width: 650px !important;
+    margin-bottom: 24px !important;
+  }
+
+  /* Warum-mich-wählen: Vorteile/Text explizit darunter (order: 2) */
+  .why-content {
+    order: 2 !important;
+    width: 100% !important;
+  }
+
+  /* Über mich: Bild zuerst (order: 1) */
   .about-photo {
     order: 1 !important;
     width: 100% !important;
-    max-width: 650px !important; /* Bild ist jetzt deutlich größer */
-    margin-bottom: 20px !important;
+    max-width: 650px !important;
+    margin-bottom: 24px !important;
+  }
+
+  /* Über mich: Text darunter (order: 2) */
+  .about-text {
+    order: 2 !important;
+    width: 100% !important;
   }
 
   .why-photo img, 
@@ -742,23 +761,16 @@ section{ position:relative; }
     display: block !important;
   }
 
-  /* Text unter dem Bild */
-  .why-content, 
-  .about-text {
-    order: 2 !important;
-    width: 100% !important;
-  }
-
 
   /* 2. REFERENZEN: Karten-Bilder füllen Box oben voll aus & kleinerer Abstand zum Text */
   .social-card {
-    padding: 0 !important; /* Entfernt Padding außen, damit das Bild oben voll anliegt */
+    padding: 0 !important;
     overflow: hidden !important;
   }
 
   .social-card .social-photo {
     width: 100% !important;
-    margin-bottom: 0 !important; /* Kein Abstand nach unten am Fotobehälter */
+    margin-bottom: 0 !important;
   }
 
   .social-card .social-photo img {
@@ -768,7 +780,7 @@ section{ position:relative; }
   }
 
   .social-card .social-body {
-    padding: 16px 20px 20px 20px !important; /* Text-Bereich direkt unter dem Bild */
+    padding: 16px 20px 20px 20px !important;
   }
 
   .social-card h3 {
