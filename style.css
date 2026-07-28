@@ -713,12 +713,12 @@ section{ position:relative; }
 
 
 /* ==========================================================================
-   ANPASSUNG FÜR IPAD / TABLET (Hoch- & Querformat)
-   Mobil (Handy) und Desktop (großer PC-Bildschirm ab 1200px) bleiben unverändert.
+   SPEZIELLE ANPASSUNG FÜR IPAD / TABLET (768px bis 1199px)
+   PC- und Smartphone-Ansichten bleiben 100% unverändert!
    ========================================================================== */
 @media screen and (min-width: 768px) and (max-width: 1199px) {
 
-  /* 1. Startseite: Erst das Bild, darunter der Text (wie bei Smartphone) */
+  /* 1. STARTSEITE: Zuerst das Bild (größer), danach der Text */
   .why-grid, 
   .about-grid {
     display: flex !important;
@@ -726,34 +726,53 @@ section{ position:relative; }
     align-items: center !important;
   }
 
+  /* Bild "Warum mich wählen" & Logo */
   .why-photo, 
   .about-photo {
     order: 1 !important;
     width: 100% !important;
-    max-width: 500px !important;
+    max-width: 650px !important; /* Bild ist jetzt deutlich größer */
     margin-bottom: 20px !important;
   }
 
+  .why-photo img, 
+  .about-photo img {
+    width: 100% !important;
+    height: auto !important;
+    display: block !important;
+  }
+
+  /* Text unter dem Bild */
   .why-content, 
   .about-text {
     order: 2 !important;
     width: 100% !important;
   }
 
-  /* 2. Referenzen: Große Abstände der Social-Media-Karten (TikTok, Google, Insta) reduzieren */
-  .social-proof-grid {
-    gap: 16px !important;
-  }
 
+  /* 2. REFERENZEN: Karten-Bilder füllen Box oben voll aus & kleinerer Abstand zum Text */
   .social-card {
-    padding: 16px !important;
+    padding: 0 !important; /* Entfernt Padding außen, damit das Bild oben voll anliegt */
+    overflow: hidden !important;
   }
 
   .social-card .social-photo {
-    margin-bottom: 10px !important;
+    width: 100% !important;
+    margin-bottom: 0 !important; /* Kein Abstand nach unten am Fotobehälter */
+  }
+
+  .social-card .social-photo img {
+    width: 100% !important;
+    height: auto !important;
+    display: block !important;
+  }
+
+  .social-card .social-body {
+    padding: 16px 20px 20px 20px !important; /* Text-Bereich direkt unter dem Bild */
   }
 
   .social-card h3 {
+    margin-top: 0 !important;
     margin-bottom: 6px !important;
   }
 
