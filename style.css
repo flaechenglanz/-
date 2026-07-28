@@ -713,23 +713,25 @@ section{ position:relative; }
 
 
 /* ==========================================================================
-   NUR FÜR IPADS / TABLETS (Zwischen 768px und 1024px Breite)
-   PC- und Smartphone-Ansicht bleiben zu 100% unverändert.
+   ANPASSUNG FÜR IPAD / TABLET (Hoch- & Querformat)
+   Mobil (Handy) und Desktop (großer PC-Bildschirm ab 1200px) bleiben unverändert.
    ========================================================================== */
-@media screen and (min-width: 768px) and (max-width: 1024px) {
+@media screen and (min-width: 768px) and (max-width: 1199px) {
 
-  /* 1. Startseite: Erst das Bild, darunter der Text */
+  /* 1. Startseite: Erst das Bild, darunter der Text (wie bei Smartphone) */
   .why-grid, 
   .about-grid {
     display: flex !important;
     flex-direction: column !important;
+    align-items: center !important;
   }
 
   .why-photo, 
   .about-photo {
     order: 1 !important;
-    margin-bottom: 24px !important;
     width: 100% !important;
+    max-width: 500px !important;
+    margin-bottom: 20px !important;
   }
 
   .why-content, 
@@ -738,12 +740,24 @@ section{ position:relative; }
     width: 100% !important;
   }
 
-  /* 2. Referenzen: Abstand zwischen Bild und Text in den Social-Karten verringern */
-  .social-card .social-photo {
-    margin-bottom: 12px !important;
+  /* 2. Referenzen: Große Abstände der Social-Media-Karten (TikTok, Google, Insta) reduzieren */
+  .social-proof-grid {
+    gap: 16px !important;
   }
-  
-  .social-card .social-body {
-    padding-top: 0 !important;
+
+  .social-card {
+    padding: 16px !important;
+  }
+
+  .social-card .social-photo {
+    margin-bottom: 10px !important;
+  }
+
+  .social-card h3 {
+    margin-bottom: 6px !important;
+  }
+
+  .social-card p {
+    margin-bottom: 12px !important;
   }
 }
