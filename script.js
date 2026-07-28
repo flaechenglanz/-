@@ -123,35 +123,92 @@ function buildMap() {
   mapInitialized = true;
 }
 
+// ══════════════════════════════════════════════════════════════════
+// ⭐ DYNAMISCHER SCROLL-EFFEKT (FUNKTIONIERT AUF ALLEN 4 SEITEN) ⭐
+// ══════════════════════════════════════════════════════════════════
+function injectRevealStyles() {
+  if (document.getElementById('reveal-style-element')) return;
+  const style = document.createElement('style');
+  style.id = 'reveal-style-element';
+  style.textContent = `
+    .reveal {
+      opacity: 0;
+      clip-path: inset(-40px 100% -40px -40px);
+      -webkit-clip-path: inset(-40px 100% -40px -40px);
+      transform: translateX(-30px);
+      transition: clip-path .9s cubic-bezier(.25,.75,.35,1),
+                  -webkit-clip-path .9s cubic-bezier(.25,.75,.35,1),
+                  transform .9s cubic-bezier(.25,.75,.35,1),
+                  opacity .4s ease;
+    }
+    .reveal.is-visible {
+      opacity: 1 !important;
+      clip-path: inset(-40px -40px -40px -40px) !important;
+      -webkit-clip-path: inset(-40px -40px -40px -40px) !important;
+      transform: translateX(0) !important;
+    }
+    @media (max-width: 720px) {
+      .reveal {
+        opacity: 1 !important;
+        clip-path: none !important;
+        -webkit-clip-path: none !important;
+        transform: none !important;
+        transition: none !important;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+}
+
 let revealObserver = null;
 
-const revealSelectorsByPage = {
-  leistungen: ['.clean-grid > *', '.pricecalc-card', '.faq-list > *'],
-  referenzen: ['.ba-slider-grid > *', '.social-proof-grid > *'],
-  kontaktieren: ['.contact-card', '.map-frame', '.hours-box']
-};
+function applyRevealClasses() {
+  // Erfasst alle spezifischen Elemente aus index.html, leistungen.html, referenzen.html & kontakt.html
+  const selectors = [
+    '.clean-card',
+    '.clean-card-leistungen',
+    '.glass-card',
+    '.pricecalc-card',
+    '.social-card',
+    '.contact-card',
+    '.ba-card',
+    '.faq-item',
+    '.ba-slider',
+    '.hours-box',
+    '.map-frame',
+    '.cta-band',
+    '.hero-grid > *',
+    '.why-grid > *',
+    '.about-grid > *',
+    '.clean-grid > *',
+    '.ba-slider-grid > *',
+    '.social-proof-grid > *',
+    '.check-list li',
+    'section:not(.hero-banner)',
+    'form'
+  ];
 
-function ensureRevealClasses(pageId) {
-  const selectors = revealSelectorsByPage[pageId];
-  if (!selectors) return;
-  const page = document.getElementById('page-' + pageId);
-  if (!page) return;
-  selectors.forEach(function(sel) {
-    page.querySelectorAll(sel).forEach(function(el) {
-      el.classList.add('reveal');
+  selectors.forEach(sel => {
+    document.querySelectorAll(sel).forEach(el => {
+      // Verhindert, dass Header oder Footer animiert werden
+      if (!el.closest('header') && !el.closest('footer')) {
+        el.classList.add('reveal');
+      }
     });
   });
 }
 
-function initScrollReveal(pageId) {
-  ensureRevealClasses(pageId);
+function initScrollReveal() {
+  injectRevealStyles();
+  applyRevealClasses();
 
-  const elements = document.querySelectorAll('#page-' + pageId + ' .reveal');
+  const elements = document.querySelectorAll('.reveal');
   if (!elements.length) return;
 
   if (revealObserver) {
     revealObserver.disconnect();
   }
+
   elements.forEach(function(el) {
     el.classList.remove('is-visible');
   });
@@ -163,7 +220,10 @@ function initScrollReveal(pageId) {
         revealObserver.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.15 });
+  }, { 
+    threshold: 0.05,
+    rootMargin: "0px 0px -30px 0px"
+  });
 
   elements.forEach(function(el) {
     revealObserver.observe(el);
@@ -189,15 +249,15 @@ function updatePreisStatus(){
   if (hidden.value && hidden.value.trim() !== ''){
     btn.classList.remove('pending');
     btn.classList.add('done');
-    title.textContent = 'Preis berechnet: ' + hidden.value;
-    sub.textContent = 'Klicken, um den Preisrechner erneut zu öffnen und Angaben zu ändern';
-    icon.textContent = '✓';
+    if (title) title.textContent = 'Preis berechnet: ' + hidden.value;
+    if (sub) sub.textContent = 'Klicken, um den Preisrechner erneut zu öffnen und Angaben zu ändern';
+    if (icon) icon.textContent = '✓';
   } else {
     btn.classList.remove('done');
     btn.classList.add('pending');
-    title.textContent = 'Preis noch nicht berechnet';
-    sub.textContent = 'Klicken, um den Preisrechner zu öffnen';
-    icon.textContent = '!';
+    if (title) title.textContent = 'Preis noch nicht berechnet';
+    if (sub) sub.textContent = 'Klicken, um den Preisrechner zu öffnen';
+    if (icon) icon.textContent = '!';
   }
 }
 
@@ -238,7 +298,6 @@ function pkRestoreInputs() {
       }
     });
 
-    // Maxima für Unter-Felder entsprechend aktualisieren
     ["klein", "mittel", "gross"].forEach(cat => {
       const inputAnzahl = document.getElementById(`pkp-${cat}-anzahl`);
       if (inputAnzahl) {
@@ -266,28 +325,24 @@ function pkRestoreInputs() {
 document.addEventListener('DOMContentLoaded', function(){
   pkSyncDisplayFromConfig();
 
-  const currentPageEl = document.querySelector('.web-page');
-  const currentPageId = currentPageEl ? currentPageEl.id.replace('page-', '') : null;
-
-  if (currentPageId === 'kontaktieren') {
+  // Prüft direkt, ob das Karten-Element auf der Seite existiert
+  if (document.getElementById('radius-map')) {
     initRadiusMap();
   }
-  if (currentPageId) {
-    initScrollReveal(currentPageId);
-  }
+
+  // Initialisiert die Wisch-Animation zuverlässig auf ALLEN 4 Seiten
+  initScrollReveal();
 
   // Vom Preisrechner übernommenes Ergebnis in das Kontaktformular einsetzen
-  if (currentPageId === 'kontaktieren') {
-    const pending = sessionStorage.getItem('pkPendingResult');
-    if (pending) {
-      try {
-        const data = JSON.parse(pending);
-        const hiddenTotal = document.getElementById('preis-ergebnis');
-        const hiddenDetails = document.getElementById('preis-details');
-        if (hiddenTotal) hiddenTotal.value = data.total;
-        if (hiddenDetails) hiddenDetails.value = data.details;
-      } catch (e) {}
-    }
+  const pending = sessionStorage.getItem('pkPendingResult');
+  if (pending) {
+    try {
+      const data = JSON.parse(pending);
+      const hiddenTotal = document.getElementById('preis-ergebnis');
+      const hiddenDetails = document.getElementById('preis-details');
+      if (hiddenTotal) hiddenTotal.value = data.total;
+      if (hiddenDetails) hiddenDetails.value = data.details;
+    } catch (e) {}
   }
 
   updatePreisStatus();
@@ -311,19 +366,23 @@ document.addEventListener('DOMContentLoaded', function(){
       const val = Math.max(0, parseInt(inputAnzahl.value || 0));
       Object.keys(PK_SURCHARGE_LABELS).forEach(key => {
         const extraInput = document.getElementById(`pkp-${cat}-${key}`);
-        extraInput.max = val;
-        if (parseInt(extraInput.value) > val) extraInput.value = val;
+        if (extraInput) {
+          extraInput.max = val;
+          if (parseInt(extraInput.value) > val) extraInput.value = val;
+        }
       });
       pkSaveInputs();
     });
     Object.keys(PK_SURCHARGE_LABELS).forEach(key => {
       const extraInput = document.getElementById(`pkp-${cat}-${key}`);
-      extraInput.addEventListener("input", () => {
-        const currentMax = parseInt(extraInput.max || 0);
-        let currentVal = parseInt(extraInput.value || 0);
-        if (currentVal > currentMax) extraInput.value = currentMax;
-        pkSaveInputs();
-      });
+      if (extraInput) {
+        extraInput.addEventListener("input", () => {
+          const currentMax = parseInt(extraInput.max || 0);
+          let currentVal = parseInt(extraInput.value || 0);
+          if (currentVal > currentMax) extraInput.value = currentMax;
+          pkSaveInputs();
+        });
+      }
     });
   });
 
@@ -365,7 +424,9 @@ document.addEventListener('DOMContentLoaded', function(){
     const detailsLines = [];
 
     pkCategories.forEach(cat => {
-      const anzahl = Math.max(0, parseInt(document.getElementById(`pkp-${cat}-anzahl`).value || 0));
+      const input = document.getElementById(`pkp-${cat}-anzahl`);
+      if (!input) return;
+      const anzahl = Math.max(0, parseInt(input.value || 0));
       if (anzahl <= 0) return;
       hasWindows = true;
       const basePrice = PK_PRICES[cat].ein;
@@ -374,7 +435,8 @@ document.addEventListener('DOMContentLoaded', function(){
       breakdown.push(`<div class="result-row"><span>${PK_PRICES[cat].label} · ${anzahl}× Grundpreis (beidseitig)</span><span>${pkFormatEuro(sumBase)}</span></div>`);
       detailsLines.push(`${PK_PRICES[cat].label}: ${anzahl}x (${pkFormatEuro(sumBase)})`);
       Object.keys(PK_SURCHARGE_LABELS).forEach(key => {
-        let extra = parseInt(document.getElementById(`pkp-${cat}-${key}`).value || 0);
+        const extraEl = document.getElementById(`pkp-${cat}-${key}`);
+        let extra = extraEl ? parseInt(extraEl.value || 0) : 0;
         if (extra > anzahl) extra = anzahl;
         if (extra > 0){
           const add = extra * PK_SURCHARGE_AMOUNTS[cat][key];
@@ -385,8 +447,8 @@ document.addEventListener('DOMContentLoaded', function(){
       });
     });
 
-    const wgM2 = parseFloat(pkWgM2Input.value || 0);
-    let wgSprossenM2 = parseFloat(pkWgSprossenInput.value || 0);
+    const wgM2 = pkWgM2Input ? parseFloat(pkWgM2Input.value || 0) : 0;
+    let wgSprossenM2 = pkWgSprossenInput ? parseFloat(pkWgSprossenInput.value || 0) : 0;
     if (wgM2 > 0){
       if (wgSprossenM2 > wgM2) wgSprossenM2 = wgM2;
       const glassBase = wgM2 * PK_GLASS.ein;
@@ -409,25 +471,25 @@ document.addEventListener('DOMContentLoaded', function(){
     const empty = document.getElementById("pkp-result-empty");
     const toBtn = document.getElementById("pkp-to-form-btn");
 
-    card.classList.add("visible");
+    if (card) card.classList.add("visible");
 
     if (!hasWindows && wgM2 <= 0){
-      outTotal.textContent = pkFormatEuro(0);
-      outBreak.innerHTML = "";
-      empty.style.display = "block";
+      if (outTotal) outTotal.textContent = pkFormatEuro(0);
+      if (outBreak) outBreak.innerHTML = "";
+      if (empty) empty.style.display = "block";
       if (toBtn) toBtn.classList.remove('visible');
       pkpLastResult = null;
       return;
     }
 
-    outTotal.textContent = pkFormatEuro(total);
-    outBreak.innerHTML = breakdown.join("");
-    empty.style.display = "none";
+    if (outTotal) outTotal.textContent = pkFormatEuro(total);
+    if (outBreak) outBreak.innerHTML = breakdown.join("");
+    if (empty) empty.style.display = "none";
 
     pkpLastResult = { total: pkFormatEuro(total), details: detailsLines.join(" | ") };
     if (toBtn) toBtn.classList.add('visible');
 
-    card.scrollIntoView({behavior:"smooth", block:"center"});
+    if (card) card.scrollIntoView({behavior:"smooth", block:"center"});
   }
 
   const calcBtn = document.getElementById("pkp-calc-btn");
@@ -444,7 +506,6 @@ document.addEventListener('DOMContentLoaded', function(){
     });
   }
 
-  // Beim Aufrufen des Preisrechners zuvor gespeicherte Werte wiederherstellen & neu berechnen
   if (pkRestoreInputs()) {
     pkCalculatePrice();
   }
