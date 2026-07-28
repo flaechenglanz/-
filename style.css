@@ -778,3 +778,43 @@ section{ position:relative; }
     margin-bottom: 12px !important;
   }
 }
+
+
+
+
+
+/* ==========================================================================
+   Mobil-Optimierung für das Kontaktformular (< 900px)
+   ========================================================================== */
+@media (max-width: 900px) {
+  /* Zwingt Formular und Infoboxen untereinander */
+  .contact-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 30px !important;
+  }
+
+  /* Formular-Karte nutzt volle Breite und erhält passende Innenabstände */
+  .contact-card {
+    padding: 24px 18px !important;
+    width: 100% !important;
+  }
+
+  /* Verhindert, dass Buttons oder Inputs den Bildschirmlauf sprengen */
+  .contact-layout > div {
+    width: 100% !important;
+  }
+
+  /* Anpassung des Preisrechner-Buttons im Formular für Smartphones */
+  #pk-status-btn {
+    padding: 10px 12px !important;
+  }
+  
+  #pk-status-title {
+    font-size: 0.85rem !important;
+  }
+  
+  #pk-status-sub {
+    font-size: 0.75rem !important;
+  }
+}
