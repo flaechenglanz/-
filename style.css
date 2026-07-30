@@ -774,3 +774,59 @@ section{ position:relative; }
     font-size: 0.75rem !important;
   }
 }
+
+
+
+
+
+/* ══════════════════════════════════════════════════════════════════ */
+/* ⭐ PRÄZISER HOVER-EFFEKT (NUR EINZELNE KARTEN & BILDER)            */
+/* ══════════════════════════════════════════════════════════════════ */
+
+/* 1. Weicher Übergang für Karten, Kacheln und Bilder */
+.clean-card, 
+.clean-card-leistungen, 
+.glass-card, 
+.pricecalc-card,
+.social-card, 
+.contact-card, 
+.ba-card, 
+.faq-item,
+.hours-box,
+.map-frame,
+.ba-slider,
+.why-card,
+.about-card,
+img {
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease !important;
+}
+
+/* 2. Vergrößerung beim Hovern (inkl. .reveal.is-visible für JavaScript-Kompatibilität) */
+.clean-card:hover, 
+.clean-card-leistungen:hover, 
+.glass-card:hover, 
+.pricecalc-card:hover,
+.social-card:hover, 
+.contact-card:hover, 
+.ba-card:hover, 
+.faq-item:hover,
+.hours-box:hover,
+.map-frame:hover,
+.ba-slider:hover,
+.why-card:hover,
+.about-card:hover,
+img:hover,
+.reveal.is-visible.clean-card:hover,
+.reveal.is-visible.clean-card-leistungen:hover,
+.reveal.is-visible.glass-card:hover,
+.reveal.is-visible.pricecalc-card:hover,
+.reveal.is-visible.social-card:hover,
+.reveal.is-visible.contact-card:hover,
+.reveal.is-visible.ba-card:hover,
+.reveal.is-visible.faq-item:hover,
+.reveal.is-visible.hours-box:hover,
+.reveal.is-visible.map-frame:hover,
+.reveal.is-visible.ba-slider:hover {
+  transform: translateY(-4px) scale(1.025) !important;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12) !important;
+}
