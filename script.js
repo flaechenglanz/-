@@ -4,15 +4,15 @@
 const PK_MIN_PRICE = 30;
 
 const PK_PRICES = {
-  klein:  { ein: 3, label: "Kleine Fenster" },
-  mittel: { ein: 5, label: "Mittelgroße Fenster" },
-  gross:  { ein: 7, label: "Große Fenster" }
+  klein:  { ein: 2, label: "Kleine Fenster" },
+  mittel: { ein: 4, label: "Mittelgroße Fenster" },
+  gross:  { ein: 5, label: "Große Fenster" }
 };
 
 const PK_SURCHARGE_AMOUNTS = {
-  klein:  { dach: 1.5, sprossen: 1 },
-  mittel: { dach: 2.5, sprossen: 1.5 },
-  gross:  { dach: 3.5, sprossen: 2 }
+  klein:  { dach: 1.0, sprossen: 0.5 },
+  mittel: { dach: 2.0, sprossen: 1.0 },
+  gross:  { dach: 2.5, sprossen: 1.5 }
 };
 
 const PK_GLASS = { ein: 2, sprossenPercent: 0.5 };
@@ -32,34 +32,42 @@ const PK_INPUT_IDS = [
 const PK_CATEGORIES = ["klein", "mittel", "gross"];
 
 // ══════════════════════════════════════════════════════════════════
-// ⭐ HILFSFUNKTIONEN & DISPLAY-SYNC
+// ⭐ HILFSFUNKTIONEN & DISPLAY-SYNC (KORRIGIERT)
 // ══════════════════════════════════════════════════════════════════
 function pkFormatEuroPlain(v) {
   return v.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " €";
 }
 
 function pkSyncDisplayFromConfig() {
+  // 1. Mindestpreis im Hinweis aktualisieren
   const mindest = document.getElementById('pkp-note-mindestpreis');
   if (mindest) mindest.textContent = pkFormatEuroPlain(PK_MIN_PRICE);
 
+  // 2. Grundpreise und Aufpreise der Fenstertypen auf der Seite aktualisieren
   PK_CATEGORIES.forEach(cat => {
-    const anzahlTotalEl = document.getElementById(`pkp-${cat}-anzahl-total`);
-    if (anzahlTotalEl) anzahlTotalEl.textContent = pkFormatEuroPlain(PK_PRICES[cat].ein);
+    // Aktualisiert z. B. #pkp-klein-price-label -> "Preis: 2,00 € (beidseitig)"
+    const priceLabel = document.getElementById(`pkp-${cat}-price-label`);
+    if (priceLabel) {
+      priceLabel.textContent = `Preis: ${pkFormatEuroPlain(PK_PRICES[cat].ein)} (beidseitig)`;
+    }
+
+    // Aktualisiert die Zuschlags-Anzeigen (+1,00 €, etc.)
     Object.keys(PK_SURCHARGE_LABELS).forEach(key => {
       const amountEl = document.getElementById(`pkp-${cat}-${key}-amount`);
-      if (amountEl) amountEl.textContent = "+" + pkFormatEuroPlain(PK_SURCHARGE_AMOUNTS[cat][key]);
+      if (amountEl && PK_SURCHARGE_AMOUNTS[cat][key] !== undefined) {
+        amountEl.textContent = "+" + pkFormatEuroPlain(PK_SURCHARGE_AMOUNTS[cat][key]);
+      }
     });
   });
 
-  const wgTotalEl = document.getElementById('pkp-wg-m2-total');
-  if (wgTotalEl) wgTotalEl.textContent = pkFormatEuroPlain(PK_GLASS.ein);
-  
-  const wgSprAmt = document.getElementById('pkp-wg-sprossen-amount');
-  if (wgSprAmt) wgSprAmt.textContent = "+" + pkFormatEuroPlain(PK_GLASS.ein * PK_GLASS.sprossenPercent);
-
+  // 3. Glasflächen-Preise aktualisieren
   const glassLabel = document.getElementById('pkp-glass-price-label');
-  if (glassLabel) glassLabel.textContent = "Preis: " + pkFormatEuroPlain(PK_GLASS.ein) + "/m² (beidseitig)";
+  if (glassLabel) {
+    glassLabel.textContent = "Preis: " + pkFormatEuroPlain(PK_GLASS.ein) + "/m² (beidseitig)";
+  }
 }
+
+
 
 // ══════════════════════════════════════════════════════════════════
 // ⭐ KARTE (LEAFLET)
