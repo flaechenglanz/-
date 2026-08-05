@@ -98,11 +98,17 @@
               <div class="card">
                 <div class="step-label">
                   <div class="step-number">1</div>
-                  <h4>Mindestpreis</h4>
+                  <h4>Mindestpreis &amp; Leistungsumfang</h4>
                 </div>
-                <div class="included-note">
+                <div class="included-note" style="margin-bottom: 12px;">
                   <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></svg>
                   <p> Der Mindestpreis bei jedem Auftrag beträgt <strong id="pkp-note-mindestpreis">30 €</strong> (dies deckt z. B. die Anfahrt und Bereitstellung ab). Sollte Ihre Berechnung darunter liegen, greift automatisch dieser Betrag.</p>
+                </div>
+                <div class="included-note">
+                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M12 9v4M12 17h.01M10.3 3.9L2.7 18a1.5 1.5 0 0 0 1.3 2.2h16a1.5 1.5 0 0 0 1.3-2.2L13.7 3.9a1.5 1.5 0 0 0-2.6 0z"/></svg>
+                  <p><strong>Was ist im Preis enthalten?</strong><br>
+                  Der Grundpreis beinhaltet bereits die Reinigung von <strong>Fensterglas, Fensterflügel, Fensterrahmen und Fensterbank von beiden Seiten</strong>.<br><br>
+                  <em>Hinweis bei einseitiger Reinigung:</em> Lässt sich ein Fenster von innen nicht öffnen oder wird zur Reinigung von außen eine höhere Leiter benötigt, kann dieses Fenster nur einseitig gereinigt werden. In diesem Fall wird der Preis für dieses Fenster halbiert. Der berechnete Preis kann sich dadurch vor Ort noch nach unten korrigieren.</p>
                 </div>
               </div>
 
@@ -148,15 +154,6 @@
                           <input type="number" id="pkp-klein-sprossen" min="0" max="0" value="0" step="1" inputmode="numeric">
                         </div>
                       </div>
-                      <div class="extra-row">
-                        <div class="extra-info">
-                          <span class="extra-label-text">Davon mit Rahmen/Falz/Bank:</span>
-                        </div>
-                        <div class="extra-counter-wrap">
-                          <span class="extra-amount-box" id="pkp-klein-falz-amount">+0,50 €</span>
-                          <input type="number" id="pkp-klein-falz" min="0" max="0" value="0" step="1" inputmode="numeric">
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -195,15 +192,6 @@
                         <div class="extra-counter-wrap">
                           <span class="extra-amount-box" id="pkp-mittel-sprossen-amount">+1,00 €</span>
                           <input type="number" id="pkp-mittel-sprossen" min="0" max="0" value="0" step="1" inputmode="numeric">
-                        </div>
-                      </div>
-                      <div class="extra-row">
-                        <div class="extra-info">
-                          <span class="extra-label-text">Davon mit Rahmen/Falz/Bank:</span>
-                        </div>
-                        <div class="extra-counter-wrap">
-                          <span class="extra-amount-box" id="pkp-mittel-falz-amount">+1,00 €</span>
-                          <input type="number" id="pkp-mittel-falz" min="0" max="0" value="0" step="1" inputmode="numeric">
                         </div>
                       </div>
                     </div>
@@ -246,22 +234,8 @@
                           <input type="number" id="pkp-gross-sprossen" min="0" max="0" value="0" step="1" inputmode="numeric">
                         </div>
                       </div>
-                      <div class="extra-row">
-                        <div class="extra-info">
-                          <span class="extra-label-text">Davon mit Rahmen/Falz/Bank:</span>
-                        </div>
-                        <div class="extra-counter-wrap">
-                          <span class="extra-amount-box" id="pkp-gross-falz-amount">+1,50 €</span>
-                          <input type="number" id="pkp-gross-falz" min="0" max="0" value="0" step="1" inputmode="numeric">
-                        </div>
-                      </div>
                     </div>
                   </div>
-                </div>
-
-                <div class="included-note">
-                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M12 9v4M12 17h.01M10.3 3.9L2.7 18a1.5 1.5 0 0 0 1.3 2.2h16a1.5 1.5 0 0 0 1.3-2.2L13.7 3.9a1.5 1.5 0 0 0-2.6 0z"/></svg>
-                  <p>Lässt sich ein Fenster von innen nicht öffnen, oder wird zur Reinigung von außen eine höhere Leiter benötigt, kann dieses Fenster nur einseitig gereinigt werden. In diesem Fall wird der Preis für dieses Fenster halbiert. Der hier berechnete Preis kann sich dadurch vor Ort noch nach unten korrigieren.</p>
                 </div>
               </div>
 
