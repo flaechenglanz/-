@@ -4,15 +4,15 @@
 const PK_MIN_PRICE = 30;
 
 const PK_PRICES = {
-  klein:  { ein: 2, label: "Kleine Fenster" },
-  mittel: { ein: 4, label: "Mittelgroße Fenster" },
-  gross:  { ein: 5, label: "Große Fenster" }
+  klein:  { ein: 3, label: "Kleine Fenster" },
+  mittel: { ein: 5, label: "Mittelgroße Fenster" },
+  gross:  { ein: 7, label: "Große Fenster" }
 };
 
 const PK_SURCHARGE_AMOUNTS = {
-  klein:  { dach: 1.0, sprossen: 0.5 },
-  mittel: { dach: 2.0, sprossen: 1.0 },
-  gross:  { dach: 2.5, sprossen: 1.5 }
+  klein:  { dach: 1.5, sprossen: 1 },
+  mittel: { dach: 2.5, sprossen: 1.5 },
+  gross:  { dach: 3.5, sprossen: 2 }
 };
 
 const PK_GLASS = { ein: 2, sprossenPercent: 0.5 };
