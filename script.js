@@ -4,29 +4,28 @@
 const PK_MIN_PRICE = 30;
 
 const PK_PRICES = {
-  klein:  { ein: 3, label: "Kleine Fenster" },
-  mittel: { ein: 5, label: "Mittelgroße Fenster" },
-  gross:  { ein: 7, label: "Große Fenster" }
+  klein:  { ein: 2, label: "Kleine Fenster" },
+  mittel: { ein: 4, label: "Mittelgroße Fenster" },
+  gross:  { ein: 5, label: "Große Fenster" }
 };
 
 const PK_SURCHARGE_AMOUNTS = {
-  klein:  { dach: 1.5,   sprossen: 1,},
-  mittel: { dach: 2.5,   sprossen: 1.5,},
-  gross:  { dach: 3.5, sprossen: 2}
+  klein:  { dach: 1.0, sprossen: 0.5 },
+  mittel: { dach: 2.0, sprossen: 1.0 },
+  gross:  { dach: 2.5, sprossen: 1.5 }
 };
 
 const PK_GLASS = { ein: 2, sprossenPercent: 0.5 };
 
 const PK_SURCHARGE_LABELS = {
   dach: "Dachfenster-Zuschlag",
-  sprossen: "Sprossen-Zuschlag",
-  falz: "Falz/Rahmen/Fensterbank-Zuschlag"
+  sprossen: "Sprossen-Zuschlag"
 };
 
 const PK_INPUT_IDS = [
-  'pkp-klein-anzahl', 'pkp-klein-dach', 'pkp-klein-sprossen', 'pkp-klein-falz',
-  'pkp-mittel-anzahl', 'pkp-mittel-dach', 'pkp-mittel-sprossen', 'pkp-mittel-falz',
-  'pkp-gross-anzahl', 'pkp-gross-dach', 'pkp-gross-sprossen', 'pkp-gross-falz',
+  'pkp-klein-anzahl', 'pkp-klein-dach', 'pkp-klein-sprossen',
+  'pkp-mittel-anzahl', 'pkp-mittel-dach', 'pkp-mittel-sprossen',
+  'pkp-gross-anzahl', 'pkp-gross-dach', 'pkp-gross-sprossen',
   'pkp-wg-m2-input', 'pkp-wg-sprossen-slider'
 ];
 
