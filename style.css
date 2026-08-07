@@ -315,8 +315,14 @@ section{ position:relative; }
 /* Bild und Text sollen auf JEDEM Gerät (Handy, iPad, PC) exakt das gleiche Größenverhältnis behalten -> feste 1fr/1fr Spalten, keine Umschaltung auf einspaltig */
 .about-grid{ display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; position:relative; z-index:1; }
 .about-grid img{ 
-  border-radius:var(--radius-lg); box-shadow:var(--shadow-soft); transform:rotate(2deg); border:8px solid var(--c-700); 
-  width:100%; margin: 0 auto; 
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-soft);
+  transform:rotate(2deg);
+  border:8px solid var(--c-700); 
+  width: 100%;
+  max-width: 750px !important; /* <--- HIER DIE GEWÜNSCHTE BREITE EINSTELLEN (z.B. 280px oder 350px) */
+  height: auto;
+  margin: 0 auto; 
   transition: transform .25s ease, box-shadow .25s ease;
 }
 .about-grid img:hover {
@@ -428,16 +434,23 @@ section{ position:relative; }
 .ba-slider-grid{ display:flex; flex-wrap:wrap; justify-content:center; gap:36px; margin:40px 0 0; }
 .ba-slider{
   flex:0 1 calc(33.333% - 24px); max-width:calc(33.333% - 24px); min-width:260px;
-  position:relative; border-radius:var(--radius-lg); overflow:hidden;
-  box-shadow:var(--shadow-card); border:2px solid var(--c-700); background:var(--c-800);
+  position:relative; border-radius:var(--radius-lg);
+  padding:10px;
+  background:linear-gradient(155deg, var(--c-700) 0%, var(--c-900) 55%, var(--c-700) 100%);
+  box-shadow:var(--shadow-card), inset 0 0 0 1px rgba(255,255,255,0.35);
   user-select:none; -webkit-user-select:none;
   transition: transform .25s ease, box-shadow .25s ease;
 }
 .ba-slider:hover {
   transform: scale(1.02);
-  box-shadow: 0 20px 45px -12px rgba(12,45,70,0.4);
+  box-shadow: 0 20px 45px -12px rgba(12,45,70,0.4), inset 0 0 0 1px rgba(255,255,255,0.5);
 }
-.ba-slider .ba-frame{ position:relative; width:100%; overflow:hidden; aspect-ratio:4/3; }
+.ba-slider .ba-frame{
+  position:relative; width:100%; overflow:hidden; aspect-ratio:4/3;
+  border-radius:calc(var(--radius-lg) - 10px);
+  border:3px solid var(--c-400);
+  box-shadow:0 10px 24px -10px rgba(12,45,70,0.55), inset 0 2px 6px rgba(0,0,0,0.15);
+}
 .ba-slider img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
 .ba-slider .ba-handle{
   position:absolute; top:0; bottom:0; width:3px; background:rgba(0,0,0,0.6);
@@ -451,6 +464,29 @@ section{ position:relative; }
 }
 .ba-label-left { left: 18px; }
 .ba-label-right { right: 18px; }
+
+.ba-slideshow{ position:relative; display:flex; align-items:center; gap:22px; }
+.ba-slideshow .ba-slider-grid{ flex:1 1 auto; margin-top:0; }
+.ba-nav{
+  flex:none; width:56px; height:96px; border-radius:16px;
+  border:2px solid var(--c-300);
+  background:linear-gradient(160deg, var(--c-500) 0%, var(--c-400) 55%, var(--c-300) 100%);
+  color:#fff; font-size:1.8rem; line-height:1; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 14px 28px -12px rgba(12,45,70,0.55), inset 0 1px 0 rgba(255,255,255,0.35);
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+.ba-nav:hover{
+  background:linear-gradient(160deg, var(--c-600) 0%, var(--c-500) 55%, var(--c-400) 100%);
+  transform:translateY(-2px) scale(1.06);
+  box-shadow:0 18px 34px -12px rgba(12,45,70,0.6), inset 0 1px 0 rgba(255,255,255,0.45);
+}
+.ba-nav:active{ transform:translateY(0) scale(0.97); }
+.ba-nav:disabled{ opacity:.3; cursor:default; transform:none; box-shadow:none; }
+@media (max-width:600px){
+  .ba-slideshow{ gap:10px; }
+  .ba-nav{ width:42px; height:76px; font-size:1.35rem; border-radius:12px; }
+}
 
 .social-proof-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:36px; }
 .social-card{
@@ -625,38 +661,6 @@ section{ position:relative; }
 .pk-embed .result-card.visible{ display:block; }
 .pk-embed .result-card h4{ margin:0 0 6px; font-size:13px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink); font-family:var(--font-display); font-weight:800; }
 
-/* ---------- Allgemeiner Hover-Effekt (Scale-Up) ---------- */
-/* Macht Karten & interaktive Elemente leicht größer beim Drüberfahren, ohne Layout oder Farben zu verändern */
-.clean-card,
-.glass-card,
-.pricecalc-card,
-.social-card,
-.faq-item,
-.ba-slider,
-.hours-box,
-.map-frame,
-.check-list li,
-.hero-badge,
-.hero-photo,
-.why-photo img,
-.about-grid img {
-  transition: transform 0.25s ease, box-shadow 0.25s ease !important;
-}
-
-.clean-card:hover,
-.glass-card:hover,
-.pricecalc-card:hover,
-.social-card:hover,
-.faq-item:hover,
-.ba-slider:hover,
-.hours-box:hover,
-.map-frame:hover,
-.check-list li:hover,
-.hero-badge:hover {
-  transform: scale(1.025) !important;
-  box-shadow: 0 18px 40px -10px rgba(12, 45, 70, 0.35) !important;
-}
-
 /* Bild-Hover für rotierte/spezielle Bilder */
 .hero-photo:hover {
   transform: rotate(2.5deg) scale(1.03) !important;
@@ -685,20 +689,19 @@ section{ position:relative; }
     align-items: center !important;
   }
 
-  /* Bilder ("Warum mich wählen" & "Über mich") */
-  .why-photo, 
-  .about-photo {
-    width: 100% !important;
-    max-width: 650px !important;
-    margin-bottom: 24px !important;
-  }
+.about-photo {
+  max-width: 300px !important; /* Steuerungsgröße für das komplette Bildelement */
+  width: 100% !important;
+  margin: 0 auto;             /* Zentriert das Bild bei Bedarf */
+}
 
-  .why-photo img, 
-  .about-photo img {
-    width: 100% !important;
-    height: auto !important;
-    display: block !important;
-  }
+.about-photo img {
+  width: 100% !important;
+  height: auto !important;
+  display: block !important;
+  border-radius: var(--radius-lg);
+  object-fit: cover;
+}
 
   /* Texte unter den Bildern */
   .why-content, 
@@ -861,4 +864,89 @@ img:hover,
   color: var(--ink);
   font-family: var(--font-display);
   line-height: 1.1;
+}
+
+
+
+
+
+/* ══════════════════════════════════════════════════════════════════ */
+/* ⭐ NEUE VORTEILE-BOXEN (4 NEBENEINANDER IN EINER REIHE)           */
+/* ══════════════════════════════════════════════════════════════════ */
+.vorteile-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.vorteil-box {
+  background: var(--c-800);
+  border: 2px solid var(--c-700);
+  border-radius: var(--radius-lg);
+  padding: 30px 22px;
+  text-align: center;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.25s ease, box-shadow 0.25s ease !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.vorteil-box:hover {
+  transform: translateY(-5px) scale(1.02) !important;
+  box-shadow: 0 16px 35px -10px rgba(12, 45, 70, 0.35) !important;
+}
+
+.vorteil-tick {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--c-400);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-bottom: 18px;
+  flex-shrink: 0;
+}
+
+.vorteil-box h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--ink);
+}
+
+.vorteil-box p {
+  font-size: 0.98rem;
+  color: var(--ink-soft);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Responsives Layout: Auf Tablets 2x2 Boxen, auf Smartphones 1-spaltig untereinander */
+@media (max-width: 1024px) {
+  .vorteile-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .vorteile-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+@media screen and (max-width: 1199px) and (min-width: 768px) {
+  .why-grid, 
+  .about-grid {
+    display: flex !important;
+    flex-direction: column-reverse !important;
+    align-items: center !important;
+  }
 }

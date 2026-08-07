@@ -225,6 +225,50 @@ function updateSlider(rangeEl, wrapId, handleId) {
 }
 
 // ══════════════════════════════════════════════════════════════════
+// ⭐ REFERENZEN-SLIDESHOW (immer 2 Vorher/Nachher-Bilder sichtbar)
+// ══════════════════════════════════════════════════════════════════
+let baCurrentPage = 0;
+
+function baSlideshowNav(direction) {
+  const grid = document.getElementById('ba-slider-grid');
+  if (!grid) return;
+
+  const slides = Array.from(grid.querySelectorAll('.ba-slider'));
+  const pages = [...new Set(slides.map(el => parseInt(el.dataset.baPage, 10)))].sort((a, b) => a - b);
+  if (!pages.length) return;
+
+  const currentIndex = pages.indexOf(baCurrentPage);
+  const nextIndex = currentIndex + direction;
+  if (nextIndex < 0 || nextIndex >= pages.length) return;
+
+  baCurrentPage = pages[nextIndex];
+
+  slides.forEach(el => {
+    el.hidden = parseInt(el.dataset.baPage, 10) !== baCurrentPage;
+  });
+
+  const prevBtn = document.getElementById('ba-prev-btn');
+  const nextBtn = document.getElementById('ba-next-btn');
+  if (prevBtn) prevBtn.disabled = baCurrentPage === pages[0];
+  if (nextBtn) nextBtn.disabled = baCurrentPage === pages[pages.length - 1];
+}
+
+function initBaSlideshow() {
+  const grid = document.getElementById('ba-slider-grid');
+  if (!grid) return;
+
+  baCurrentPage = 0;
+  const prevBtn = document.getElementById('ba-prev-btn');
+  const nextBtn = document.getElementById('ba-next-btn');
+  if (prevBtn) prevBtn.disabled = true;
+  if (nextBtn) {
+    const slides = grid.querySelectorAll('.ba-slider');
+    const pages = new Set(Array.from(slides).map(el => parseInt(el.dataset.baPage, 10)));
+    nextBtn.disabled = pages.size <= 1;
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════
 // ⭐ STATUS, SPEICHERN & WIEDERHERSTELLEN
 // ══════════════════════════════════════════════════════════════════
 function updatePreisStatus() {
@@ -365,6 +409,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   initScrollReveal();
+  initBaSlideshow();
 
   // Vom Preisrechner übernommenes Ergebnis im Kontaktformular einsetzen
   const pending = sessionStorage.getItem('pkPendingResult');
