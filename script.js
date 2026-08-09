@@ -4,28 +4,29 @@
 const PK_MIN_PRICE = 30;
 
 const PK_PRICES = {
-  klein:  { ein: 3, label: "Kleine Fenster" },
-  mittel: { ein: 5, label: "Mittelgroße Fenster" },
-  gross:  { ein: 7, label: "Große Fenster" }
+  klein:  { ein: 2.5, label: "Kleine Fenster" },
+  mittel: { ein: 4, label: "Mittelgroße Fenster" },
+  gross:  { ein: 5, label: "Große Fenster" }
 };
 
 const PK_SURCHARGE_AMOUNTS = {
-  klein:  { dach: 1.5, sprossen: 1 },
-  mittel: { dach: 2.5, sprossen: 1.5 },
-  gross:  { dach: 3.5, sprossen: 2 }
+  klein:  { fluegel: 0.5, dach: 1.5, sprossen: 1 },
+  mittel: { fluegel: 1, dach: 2.5, sprossen: 1.5 },
+  gross:  { fluegel: 2, dach: 3.5, sprossen: 2 }
 };
 
 const PK_GLASS = { ein: 2, sprossenPercent: 0.5 };
 
 const PK_SURCHARGE_LABELS = {
+  fluegel: "Flügel/Rahmen/Bank-Zuschlag",
   dach: "Dachfenster-Zuschlag",
   sprossen: "Sprossen-Zuschlag"
 };
 
 const PK_INPUT_IDS = [
-  'pkp-klein-anzahl', 'pkp-klein-dach', 'pkp-klein-sprossen',
-  'pkp-mittel-anzahl', 'pkp-mittel-dach', 'pkp-mittel-sprossen',
-  'pkp-gross-anzahl', 'pkp-gross-dach', 'pkp-gross-sprossen',
+  'pkp-klein-anzahl', 'pkp-klein-fluegel', 'pkp-klein-dach', 'pkp-klein-sprossen',
+  'pkp-mittel-anzahl', 'pkp-mittel-fluegel', 'pkp-mittel-dach', 'pkp-mittel-sprossen',
+  'pkp-gross-anzahl', 'pkp-gross-fluegel', 'pkp-gross-dach', 'pkp-gross-sprossen',
   'pkp-wg-m2-input', 'pkp-wg-sprossen-slider'
 ];
 
@@ -88,9 +89,16 @@ function initRadiusMap() {
   document.head.appendChild(geocoderJs);
 }
 
+function refreshRadiusMap() {
+  if (mapInitialized && window.radiusMapInstance) {
+    window.radiusMapInstance.invalidateSize();
+  }
+}
+
 function buildMap() {
   const tonwerkstrasseCoords = [52.2045, 8.7011];
   const map = L.map('radius-map').setView(tonwerkstrasseCoords, 12);
+  window.radiusMapInstance = map;
 
   L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
     attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EBL, and the GIS User Community'
@@ -299,7 +307,7 @@ function updatePreisStatus() {
 function openPreisrechnerFromForm() {
   saveKontaktForm(); // 👈 Speichert aktuelle Kontaktdaten ab
   sessionStorage.setItem('pkReturnToKontakt', '1');
-  window.location.href = 'preisrechner.html';
+  window.location.hash = '#preisrechner';
 }
 
 // ---------- Preisrechner Eingaben speichern ----------
@@ -565,7 +573,7 @@ document.addEventListener('DOMContentLoaded', function() {
       pkSaveInputs();
       sessionStorage.setItem('pkPendingResult', JSON.stringify(pkpLastResult));
       sessionStorage.removeItem('pkReturnToKontakt');
-      window.location.href = 'kontakt.html';
+      window.location.hash = '#kontakt';
     });
   }
 
