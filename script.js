@@ -10,9 +10,9 @@ const PK_PRICES = {
 };
 
 const PK_SURCHARGE_AMOUNTS = {
-  klein:  { fluegel: 0.5, dach: 1.5, sprossen: 1 },
-  mittel: { fluegel: 1, dach: 2.5, sprossen: 1.5 },
-  gross:  { fluegel: 2, dach: 3.5, sprossen: 2 }
+  klein:  { fluegel: 0.5, dach: 1, sprossen: 0.5 },
+  mittel: { fluegel: 1, dach: 2, sprossen: 1 },
+  gross:  { fluegel: 2, dach: 2.5, sprossen: 2 }
 };
 
 const PK_GLASS = { ein: 2, sprossenPercent: 0.5 };
