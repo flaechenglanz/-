@@ -306,22 +306,33 @@
                   <div class="step-number">1</div>
                   <h4>Wichtige Infos</h4>
                 </div>
-                <div class="included-note" style="margin-bottom: 16px;">
-                  Dieser Rechner dient nur dazu, Ihnen eine grobe Vorstellung von den Kosten für eine Reinigung bei Ihnen zu geben und ist deshalb unverbindlich und nicht zwingend was sie vorort zahlen. Der echte Preis kann sowohl nach oben als auch nach unten von diesem Ergebnis abweichen. Vor Beginn des Auftrages schaue ich mir vor Ort noch einmal alles genau an und nenne Ihnen dann einen festen, verbindlichen Preis, bevor ich mit der Arbeit anfange. </p>
-                </div>
-                <div class="included-note" style="margin-bottom: 16px;">
-                  <p> Der Mindestpreis bei jedem Auftrag beträgt <strong id="pkp-note-mindestpreis">30 €</strong> (dies deckt z. B. die Anfahrt und Bereitstellung ab). Sollte Ihre Berechnung darunter liegen, greift automatisch dieser Betrag.</p>
-                </div>
-                <div class="included-note" style="margin-bottom: 16px;">
-                  Der Grundpreis beinhaltet nur die Reinigung des Fensterglases von beiden Seiten.<br>
-                  Weitere Zusatzleistungen werden in Form von Zuschlägen auf den Grundpreis drauf gerechnet. <br> <br>
-                  Flügel/Rahmen/Bank-Zuchlag: Geben sie an bei wie vielen Fenster diese Elemente mit gereinigt werden sollen. <br>
-                  Sprossen-Zuchlag: Geben sie an wie viele ihrer Fenster Sprossen besitzen. <br>
-                  Dachfenster-Zuchlag: Geben sie an bei wie vielen ihrer Fenster es sich um Dachfenster handelt </p>
-                </div>
-                <div class="included-note">
-                  Lässt sich ein Fenster von innen nicht öffnen oder wird zur Reinigung von außen eine höhere Leiter benötigt, kann dieses Fenster nur einseitig gereinigt werden. In diesem Fall wird der Preis für dieses Fenster halbiert. Der berechnete Preis kann sich dadurch vor Ort noch nach unten korrigieren.</p>
-                </div>
+                <details class="faq-item pk-info-item">
+                  <summary>Wozu dient der Rechner?<span class="faq-plus">+</span></summary>
+                  <div class="faq-body">
+                    <p>Dieser Rechner dient nur dazu, Ihnen eine grobe Vorstellung von den Kosten für eine Reinigung bei Ihnen zu geben und ist deshalb unverbindlich und nicht zwingend was sie vorort zahlen. Der echte Preis kann sowohl nach oben als auch nach unten von diesem Ergebnis abweichen. Vor Beginn des Auftrages schaue ich mir vor Ort noch einmal alles genau an und nenne Ihnen dann einen festen, verbindlichen Preis, bevor ich mit der Arbeit anfange.</p>
+                  </div>
+                </details>
+                <details class="faq-item pk-info-item">
+                  <summary>Der Mindestpreis<span class="faq-plus">+</span></summary>
+                  <div class="faq-body">
+                    <p>Der Mindestpreis bei jedem Auftrag beträgt <strong id="pkp-note-mindestpreis">30 €</strong> (dies deckt z. B. die Anfahrt und Bereitstellung ab). Sollte Ihre Berechnung darunter liegen, greift automatisch dieser Betrag.</p>
+                  </div>
+                </details>
+                <details class="faq-item pk-info-item">
+                  <summary>Grundreinigung und Zuschläge<span class="faq-plus">+</span></summary>
+                  <div class="faq-body">
+                    <p>Der Grundpreis beinhaltet nur die Reinigung des Fensterglases von beiden Seiten.<br>
+                    Weitere Zusatzleistungen werden in Form von Zuschlägen auf den Grundpreis drauf gerechnet. <br><br>
+                    Flügel/Rahmen/Bank-Zuschlag: Geben sie an bei wie vielen Fenster diese Elemente mit gereinigt werden sollen. <br>
+                    Sprossen-Zuschlag: Geben sie an wie viele ihrer Fenster Sprossen besitzen.</p>
+                  </div>
+                </details>
+                <details class="faq-item pk-info-item">
+                  <summary>Einseitige Reinigung<span class="faq-plus">+</span></summary>
+                  <div class="faq-body">
+                    <p>Lässt sich ein Fenster von innen nicht öffnen oder wird zur Reinigung von außen eine höhere Leiter benötigt, kann dieses Fenster nur einseitig gereinigt werden. In diesem Fall wird der Preis für dieses Fenster halbiert. Der berechnete Preis kann sich dadurch vor Ort noch nach unten korrigieren.</p>
+                  </div>
+                </details>
               </div>
 
               <div class="card">
@@ -337,7 +348,7 @@
                     </div>
                     <strong>Kleines Fenster (unter 0,5 m²)</strong>
                   </div>
-                  <span style="font-weight:800; display:block; margin-bottom:18px;" id="pkp-klein-price-label">Preis: 2,50 € (beidseitig)</span>
+                  <span style="font-weight:800; display:block; margin-bottom:18px;" id="pkp-klein-price-label">Preis: 2,00 € (beidseitig)</span>
                   <div class="extras-box">
                     <div class="extras-grid">
                       <div class="extra-row">
@@ -353,17 +364,8 @@
                           <span class="extra-label-text">Davon mit Fl&uuml;gel/Rahmen/Bank:</span>
                         </div>
                         <div class="extra-counter-wrap">
-                          <span class="extra-amount-box" id="pkp-klein-fluegel-amount">+0,50 &euro;</span>
+                          <span class="extra-amount-box" id="pkp-klein-fluegel-amount">+1,00 &euro;</span>
                           <input type="number" id="pkp-klein-fluegel" min="0" max="0" value="0" step="1" inputmode="numeric">
-                        </div>
-                      </div>
-                      <div class="extra-row">
-                        <div class="extra-info">
-                          <span class="extra-label-text">Davon Dachfenster:</span>
-                        </div>
-                        <div class="extra-counter-wrap">
-                          <span class="extra-amount-box" id="pkp-klein-dach-amount">+1,00 €</span>
-                          <input type="number" id="pkp-klein-dach" min="0" max="0" value="0" step="1" inputmode="numeric">
                         </div>
                       </div>
                       <div class="extra-row">
@@ -386,7 +388,7 @@
                     </div>
                     <strong>Mittelgroßes Fenster (0,5 – 1,5 m²)</strong>
                   </div>
-                  <span style="font-weight:800; display:block; margin-bottom:18px;" id="pkp-mittel-price-label">Preis: 4,00 € (beidseitig)</span>
+                  <span style="font-weight:800; display:block; margin-bottom:18px;" id="pkp-mittel-price-label">Preis: 3,00 € (beidseitig)</span>
                   <div class="extras-box">
                     <div class="extras-grid">
                       <div class="extra-row">
@@ -402,17 +404,8 @@
                           <span class="extra-label-text">Davon mit Fl&uuml;gel/Rahmen/Bank:</span>
                         </div>
                         <div class="extra-counter-wrap">
-                          <span class="extra-amount-box" id="pkp-mittel-fluegel-amount">+1,00 &euro;</span>
+                          <span class="extra-amount-box" id="pkp-mittel-fluegel-amount">+2,00 &euro;</span>
                           <input type="number" id="pkp-mittel-fluegel" min="0" max="0" value="0" step="1" inputmode="numeric">
-                        </div>
-                      </div>
-                      <div class="extra-row">
-                        <div class="extra-info">
-                          <span class="extra-label-text">Davon Dachfenster:</span>
-                        </div>
-                        <div class="extra-counter-wrap">
-                          <span class="extra-amount-box" id="pkp-mittel-dach-amount">+2,00 €</span>
-                          <input type="number" id="pkp-mittel-dach" min="0" max="0" value="0" step="1" inputmode="numeric">
                         </div>
                       </div>
                       <div class="extra-row">
@@ -435,7 +428,7 @@
                     </div>
                     <strong>Großes Fenster (über 1,5 m²)</strong>
                   </div>
-                  <span style="font-weight:800; display:block; margin-bottom:18px;" id="pkp-gross-price-label">Preis: 5,00 € (beidseitig)</span>
+                  <span style="font-weight:800; display:block; margin-bottom:18px;" id="pkp-gross-price-label">Preis: 4,00 € (beidseitig)</span>
                   <div class="extras-box">
                     <div class="extras-grid">
                       <div class="extra-row">
@@ -451,17 +444,8 @@
                           <span class="extra-label-text">Davon mit Fl&uuml;gel/Rahmen/Bank:</span>
                         </div>
                         <div class="extra-counter-wrap">
-                          <span class="extra-amount-box" id="pkp-gross-fluegel-amount">+2,00 &euro;</span>
+                          <span class="extra-amount-box" id="pkp-gross-fluegel-amount">+3,00 &euro;</span>
                           <input type="number" id="pkp-gross-fluegel" min="0" max="0" value="0" step="1" inputmode="numeric">
-                        </div>
-                      </div>
-                      <div class="extra-row">
-                        <div class="extra-info">
-                          <span class="extra-label-text">Davon Dachfenster:</span>
-                        </div>
-                        <div class="extra-counter-wrap">
-                          <span class="extra-amount-box" id="pkp-gross-dach-amount">+2,50 €</span>
-                          <input type="number" id="pkp-gross-dach" min="0" max="0" value="0" step="1" inputmode="numeric">
                         </div>
                       </div>
                       <div class="extra-row">
