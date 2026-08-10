@@ -2,6 +2,7 @@
 // ⭐ PREIS-KONFIGURATION
 // ══════════════════════════════════════════════════════════════════
 const PK_MIN_PRICE = 30;
+const PK_ERWEITERT_PERCENT = 0.5;
 
 const PK_PRICES = {
   klein:  { ein: 2, label: "Kleine Fenster" },
@@ -10,23 +11,19 @@ const PK_PRICES = {
 };
 
 const PK_SURCHARGE_AMOUNTS = {
-  klein:  { fluegel: 1, sprossen: 0.5 },
-  mittel: { fluegel: 2, sprossen: 1 },
-  gross:  { fluegel: 3, sprossen: 1.5 }
+  klein:  { sprossen: 0.5 },
+  mittel: { sprossen: 1 },
+  gross:  { sprossen: 1.5 }
 };
 
-const PK_GLASS = { ein: 2, sprossenPercent: 0.5 };
-
 const PK_SURCHARGE_LABELS = {
-  fluegel: "Flügel/Rahmen/Bank-Zuschlag",
   sprossen: "Sprossen-Zuschlag"
 };
 
 const PK_INPUT_IDS = [
-  'pkp-klein-anzahl', 'pkp-klein-fluegel', 'pkp-klein-sprossen',
-  'pkp-mittel-anzahl', 'pkp-mittel-fluegel', 'pkp-mittel-sprossen',
-  'pkp-gross-anzahl', 'pkp-gross-fluegel', 'pkp-gross-sprossen',
-  'pkp-wg-m2-input', 'pkp-wg-sprossen-slider'
+  'pkp-klein-anzahl', 'pkp-klein-sprossen',
+  'pkp-mittel-anzahl', 'pkp-mittel-sprossen',
+  'pkp-gross-anzahl', 'pkp-gross-sprossen'
 ];
 
 const PK_CATEGORIES = ["klein", "mittel", "gross"];
@@ -59,12 +56,6 @@ function pkSyncDisplayFromConfig() {
       }
     });
   });
-
-  // 3. Glasflächen-Preise aktualisieren
-  const glassLabel = document.getElementById('pkp-glass-price-label');
-  if (glassLabel) {
-    glassLabel.textContent = "Preis: " + pkFormatEuroPlain(PK_GLASS.ein) + "/m² (beidseitig)";
-  }
 }
 
 
@@ -316,6 +307,8 @@ function pkSaveInputs() {
     const el = document.getElementById(id);
     if (el) inputs[id] = el.value;
   });
+  const artSel = document.querySelector('input[name="pkp-art"]:checked');
+  inputs['pkp-art'] = artSel ? artSel.value : 'grund';
   sessionStorage.setItem('pkSavedInputs', JSON.stringify(inputs));
 }
 
@@ -333,14 +326,6 @@ function pkSyncInputLimits() {
       });
     }
   });
-
-  const pkWgM2Input = document.getElementById("pkp-wg-m2-input");
-  const pkWgSprossenInput = document.getElementById("pkp-wg-sprossen-slider");
-  if (pkWgM2Input && pkWgSprossenInput) {
-    const totalM2 = Math.max(0, parseInt(pkWgM2Input.value || 0));
-    pkWgSprossenInput.max = totalM2;
-    if (parseInt(pkWgSprossenInput.value || 0) > totalM2) pkWgSprossenInput.value = totalM2;
-  }
 }
 
 function pkRestoreInputs() {
@@ -357,6 +342,11 @@ function pkRestoreInputs() {
         if (parseFloat(inputs[id]) > 0) hasValue = true;
       }
     });
+
+    if (inputs['pkp-art']) {
+      const artEl = document.querySelector(`input[name="pkp-art"][value="${inputs['pkp-art']}"]`);
+      if (artEl) artEl.checked = true;
+    }
 
     pkSyncInputLimits();
     return hasValue;
@@ -468,6 +458,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
+  document.querySelectorAll('input[name="pkp-art"]').forEach(el => {
+    el.addEventListener('change', () => {
+      pkSaveInputs();
+      pkpHideToForm();
+    });
+  });
+
   function pkpHideToForm() {
     const toBtn = document.getElementById('pkp-to-form-btn');
     if (toBtn) toBtn.classList.remove('visible');
@@ -476,62 +473,76 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function pkCalculatePrice() {
     pkSaveInputs();
-    let total = 0;
     let hasWindows = false;
     const breakdown = [];
     const detailsLines = [];
+    const catAnzahl = {};
+    let baseTotal = 0;
 
     PK_CATEGORIES.forEach(cat => {
       const input = document.getElementById(`pkp-${cat}-anzahl`);
-      if (!input) return;
-      const anzahl = Math.max(0, parseInt(input.value || 0));
-      if (anzahl <= 0) return;
-
-      hasWindows = true;
-      const basePrice = PK_PRICES[cat].ein;
-      const sumBase = anzahl * basePrice;
-      total += sumBase;
-
-      breakdown.push(`<div class="result-row"><span>${PK_PRICES[cat].label} · ${anzahl}× Grundpreis (beidseitig)</span><span>${pkFormatEuroPlain(sumBase)}</span></div>`);
-      detailsLines.push(`${PK_PRICES[cat].label}: ${anzahl}x (${pkFormatEuroPlain(sumBase)})`);
-
-      Object.keys(PK_SURCHARGE_LABELS).forEach(key => {
-        const extraEl = document.getElementById(`pkp-${cat}-${key}`);
-        let extra = extraEl ? parseInt(extraEl.value || 0) : 0;
-        if (extra > anzahl) extra = anzahl;
-
-        if (extra > 0) {
-          const add = extra * PK_SURCHARGE_AMOUNTS[cat][key];
-          total += add;
-          breakdown.push(`<div class="result-row"><span>${PK_PRICES[cat].label} · ${PK_SURCHARGE_LABELS[key]} (${extra}×)</span><span>+${pkFormatEuroPlain(add)}</span></div>`);
-          detailsLines.push(`${PK_PRICES[cat].label} ${PK_SURCHARGE_LABELS[key]}: ${extra}x (+${pkFormatEuroPlain(add)})`);
-        }
-      });
+      const anzahl = input ? Math.max(0, parseInt(input.value || 0)) : 0;
+      catAnzahl[cat] = anzahl;
+      if (anzahl > 0) {
+        hasWindows = true;
+        baseTotal += anzahl * PK_PRICES[cat].ein;
+      }
     });
 
-    const pkWgM2Input = document.getElementById("pkp-wg-m2-input");
-    const pkWgSprossenInput = document.getElementById("pkp-wg-sprossen-slider");
+    const artSel = document.querySelector('input[name="pkp-art"]:checked');
+    const art = artSel ? artSel.value : 'grund';
+    const erweitertAufpreis = (art === 'erweitert' && baseTotal > 0) ? baseTotal * PK_ERWEITERT_PERCENT : 0;
 
-    const wgM2 = pkWgM2Input ? parseFloat(pkWgM2Input.value || 0) : 0;
-    let wgSprossenM2 = pkWgSprossenInput ? parseFloat(pkWgSprossenInput.value || 0) : 0;
+    let total = baseTotal + erweitertAufpreis;
 
-    if (wgM2 > 0) {
-      if (wgSprossenM2 > wgM2) wgSprossenM2 = wgM2;
-      const glassBase = wgM2 * PK_GLASS.ein;
-      total += glassBase;
+    // 1. Übersicht der Fensterarten
+    PK_CATEGORIES.forEach(cat => {
+      const anzahl = catAnzahl[cat];
+      if (anzahl <= 0) return;
+      const sumBase = anzahl * PK_PRICES[cat].ein;
+      breakdown.push(`<div class="result-row"><span>${PK_PRICES[cat].label} · ${anzahl}× eingetragen</span><span>${pkFormatEuroPlain(sumBase)}</span></div>`);
+      detailsLines.push(`${PK_PRICES[cat].label}: ${anzahl}x (${pkFormatEuroPlain(sumBase)})`);
+    });
 
-      breakdown.push(`<div class="result-row"><span>Glasflächen · ${wgM2} m² Grundpreis (beidseitig)</span><span>${pkFormatEuroPlain(glassBase)}</span></div>`);
-      detailsLines.push(`Glasflächen: ${wgM2} m² (${pkFormatEuroPlain(glassBase)})`);
-
-      if (wgSprossenM2 > 0) {
-        const sprossenAufpreis = wgSprossenM2 * PK_GLASS.ein * PK_GLASS.sprossenPercent;
-        total += sprossenAufpreis;
-        breakdown.push(`<div class="result-row"><span>Glasflächen · Sprossen-Zuschlag (${wgSprossenM2} m²)</span><span>+${pkFormatEuroPlain(sprossenAufpreis)}</span></div>`);
-        detailsLines.push(`Glasflächen Sprossen-Zuschlag: ${wgSprossenM2} m² (+${pkFormatEuroPlain(sprossenAufpreis)})`);
+    // 2. Grundpreis & Reinigungsart
+    if (hasWindows) {
+      breakdown.push(`<div class="result-heading">Grundpreis:</div>`);
+      breakdown.push(`<div class="result-row"><span>Grundpreis gesamt</span><span>${pkFormatEuroPlain(baseTotal)}</span></div>`);
+      if (art === 'erweitert') {
+        breakdown.push(`<div class="result-row"><span>Erweiterte Reinigung (+50%)</span><span>+${pkFormatEuroPlain(erweitertAufpreis)}</span></div>`);
+        detailsLines.push(`Reinigungsart: Erweiterte Reinigung (+${pkFormatEuroPlain(erweitertAufpreis)})`);
+      } else {
+        breakdown.push(`<div class="result-row"><span>Grundreinigung (kein Aufpreis)</span><span>+0,00 €</span></div>`);
+        detailsLines.push(`Reinigungsart: Grundreinigung`);
       }
     }
 
-    if (total < PK_MIN_PRICE && (hasWindows || wgM2 > 0)) {
+    // 3. Sprossenaufschlag
+    let sprossenTotal = 0;
+    const sprossenRows = [];
+    PK_CATEGORIES.forEach(cat => {
+      const anzahl = catAnzahl[cat];
+      const extraEl = document.getElementById(`pkp-${cat}-sprossen`);
+      let extra = extraEl ? parseInt(extraEl.value || 0) : 0;
+      if (extra > anzahl) extra = anzahl;
+      if (extra > 0) {
+        const add = extra * PK_SURCHARGE_AMOUNTS[cat].sprossen;
+        sprossenTotal += add;
+        sprossenRows.push({ cat, extra, add });
+      }
+    });
+    total += sprossenTotal;
+
+    if (sprossenRows.length > 0) {
+      breakdown.push(`<div class="result-heading">Sprossen-Zuschlag:</div>`);
+      sprossenRows.forEach(r => {
+        breakdown.push(`<div class="result-row"><span>${PK_PRICES[r.cat].label} · ${r.extra}× Sprossen</span><span>+${pkFormatEuroPlain(r.add)}</span></div>`);
+        detailsLines.push(`${PK_PRICES[r.cat].label} Sprossen-Zuschlag: ${r.extra}x (+${pkFormatEuroPlain(r.add)})`);
+      });
+      breakdown.push(`<div class="result-row"><span>Sprossenaufschlag gesamt</span><span>+${pkFormatEuroPlain(sprossenTotal)}</span></div>`);
+    }
+
+    if (total < PK_MIN_PRICE && hasWindows) {
       total = PK_MIN_PRICE;
     }
 
@@ -543,7 +554,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (card) card.classList.add("visible");
 
-    if (!hasWindows && wgM2 <= 0) {
+    if (!hasWindows) {
       if (outTotal) outTotal.textContent = pkFormatEuroPlain(0);
       if (outBreak) outBreak.innerHTML = "";
       if (empty) empty.style.display = "block";

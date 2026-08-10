@@ -304,30 +304,46 @@
               <div class="card">
                 <div class="step-label">
                   <div class="step-number">1</div>
-                  <h4>Wichtige Infos</h4>
+                  <h4>Was ist dieser Rechner?</h4>
                 </div>
-                <details class="faq-item pk-info-item">
-                  <summary>Wozu dient der Rechner ?<span class="faq-plus">+</span></summary>
-                  <div class="faq-body">
-                    <p>Dieser Rechner dient nur dazu, Ihnen eine grobe Vorstellung von den Kosten für eine Reinigung bei Ihnen zu geben und ist deshalb unverbindlich und nicht zwingend was sie vorort zahlen. Der echte Preis kann sowohl nach oben als auch nach unten von diesem Ergebnis abweichen. Vor Beginn des Auftrages schaue ich mir vor Ort noch einmal alles genau an und nenne Ihnen dann einen festen, verbindlichen Preis, bevor ich mit der Arbeit anfange.</p>
-                  </div>
-                </details>
-                <details class="faq-item pk-info-item">
-                  <summary>Der Mindestpreis<span class="faq-plus">+</span></summary>
-                  <div class="faq-body">
-                    <p>Der Mindestpreis bei jedem Auftrag beträgt <strong id="pkp-note-mindestpreis">30 €</strong> (dies deckt z. B. die Anfahrt und Bereitstellung ab). Sollte Ihre Berechnung darunter liegen, greift automatisch dieser Betrag.</p>
-                  </div>
-                </details>
-                <details class="faq-item pk-info-item">
-                  <summary>Grundreinigung und Zuschläge<span class="faq-plus">+</span></summary>
-                  <div class="faq-body">
-                    <p>Der Grundpreis beinhaltet nur die Reinigung des Fensterglases von beiden Seiten.<br>
-                    Weitere Zusatzleistungen werden in Form von Zuschlägen auf den Grundpreis drauf gerechnet. <br><br>
-                    Flügel/Rahmen/Bank-Zuschlag: Geben sie an bei wie vielen Fenster diese Elemente mit gereinigt werden sollen. <br>
-                    Sprossen-Zuschlag: Geben sie an wie viele ihrer Fenster Sprossen besitzen.</p>
-                  </div>
-                </details>
-                <details class="faq-item pk-info-item">
+                <div class="included-note">
+                  <p>Dieser Rechner dient nur dazu, Ihnen eine grobe Vorstellung von den Kosten für eine Reinigung bei Ihnen zu geben und ist deshalb unverbindlich und nicht zwingend was sie vorort zahlen. Der echte Preis kann sowohl nach oben als auch nach unten von diesem Ergebnis abweichen. Vor Beginn des Auftrages schaue ich mir vor Ort noch einmal alles genau an und nenne Ihnen dann einen festen, verbindlichen Preis, bevor ich mit der Arbeit anfange.</p>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="step-label">
+                  <div class="step-number">2</div>
+                  <h4>Mindestpreis</h4>
+                </div>
+                <div class="included-note">
+                  <p>Der Mindestpreis bei jedem Auftrag beträgt <strong id="pkp-note-mindestpreis">30 €</strong> (dies deckt z. B. die Anfahrt und Bereitstellung ab). Sollte Ihre Berechnung darunter liegen, greift automatisch dieser Betrag.</p>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="step-label">
+                  <div class="step-number">3</div>
+                  <h4>Reinigungsart</h4>
+                </div>
+                <div class="reinigungsart-grid">
+                  <label class="reinigungsart-box">
+                    <input type="radio" name="pkp-art" id="pkp-art-grund" value="grund" checked>
+                    <div class="rb-content">
+                      <h4>Grundreinigung</h4>
+                      <p>Der Grundpreis beinhaltet nur die Reinigung des Fensterglases von beiden Seiten.</p>
+                    </div>
+                  </label>
+                  <label class="reinigungsart-box">
+                    <input type="radio" name="pkp-art" id="pkp-art-erweitert" value="erweitert">
+                    <div class="rb-content">
+                      <h4>Erweiterte Reinigung</h4>
+                      <p>Zusätzlich zum Fensterglas werden auch Flügel, Rahmen und Fensterbank mit gereinigt. Dafür wird ein Aufpreis von 50&nbsp;% auf den gesamten Grundpreis berechnet.</p>
+                      <span class="rb-surcharge-badge">+50%</span>
+                    </div>
+                  </label>
+                </div>
+                <details class="faq-item pk-info-item" style="margin-top:20px;">
                   <summary>Einseitige Reinigung<span class="faq-plus">+</span></summary>
                   <div class="faq-body">
                     <p>Lässt sich ein Fenster von innen nicht öffnen oder wird zur Reinigung von außen eine höhere Leiter benötigt, kann dieses Fenster nur einseitig gereinigt werden. In diesem Fall wird der Preis für dieses Fenster halbiert. Der berechnete Preis kann sich dadurch vor Ort noch nach unten korrigieren.</p>
@@ -337,8 +353,11 @@
 
               <div class="card">
                 <div class="step-label">
-                  <div class="step-number">2</div>
+                  <div class="step-number">4</div>
                   <h4>Ihre Fenster</h4>
+                </div>
+                <div class="included-note" style="margin-bottom:24px;">
+                  <p>Sprossen-Zuschlag: Geben Sie an, wie viele Ihrer Fenster Sprossen besitzen.</p>
                 </div>
 
                 <div class="window-item">
@@ -357,15 +376,6 @@
                         </div>
                         <div class="extra-counter-wrap">
                           <input type="number" id="pkp-klein-anzahl" min="0" step="1" value="0" inputmode="numeric">
-                        </div>
-                      </div>
-                      <div class="extra-row">
-                        <div class="extra-info">
-                          <span class="extra-label-text">Davon mit Fl&uuml;gel/Rahmen/Bank:</span>
-                        </div>
-                        <div class="extra-counter-wrap">
-                          <span class="extra-amount-box" id="pkp-klein-fluegel-amount">+1,00 &euro;</span>
-                          <input type="number" id="pkp-klein-fluegel" min="0" max="0" value="0" step="1" inputmode="numeric">
                         </div>
                       </div>
                       <div class="extra-row">
@@ -401,15 +411,6 @@
                       </div>
                       <div class="extra-row">
                         <div class="extra-info">
-                          <span class="extra-label-text">Davon mit Fl&uuml;gel/Rahmen/Bank:</span>
-                        </div>
-                        <div class="extra-counter-wrap">
-                          <span class="extra-amount-box" id="pkp-mittel-fluegel-amount">+2,00 &euro;</span>
-                          <input type="number" id="pkp-mittel-fluegel" min="0" max="0" value="0" step="1" inputmode="numeric">
-                        </div>
-                      </div>
-                      <div class="extra-row">
-                        <div class="extra-info">
                           <span class="extra-label-text">Davon mit Sprossen:</span>
                         </div>
                         <div class="extra-counter-wrap">
@@ -441,54 +442,11 @@
                       </div>
                       <div class="extra-row">
                         <div class="extra-info">
-                          <span class="extra-label-text">Davon mit Fl&uuml;gel/Rahmen/Bank:</span>
-                        </div>
-                        <div class="extra-counter-wrap">
-                          <span class="extra-amount-box" id="pkp-gross-fluegel-amount">+3,00 &euro;</span>
-                          <input type="number" id="pkp-gross-fluegel" min="0" max="0" value="0" step="1" inputmode="numeric">
-                        </div>
-                      </div>
-                      <div class="extra-row">
-                        <div class="extra-info">
                           <span class="extra-label-text">Davon mit Sprossen:</span>
                         </div>
                         <div class="extra-counter-wrap">
                           <span class="extra-amount-box" id="pkp-gross-sprossen-amount">+1,50 €</span>
                           <input type="number" id="pkp-gross-sprossen" min="0" max="0" value="0" step="1" inputmode="numeric">
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="card">
-                <div class="step-label">
-                  <div class="step-number">3</div>
-                  <h4>Glasflächen</h4>
-                </div>
-                <div class="window-item">
-                  <strong style="font-size:1.05rem;">Schaufenster / Glasfronten / Wintergärten</strong><br>
-                  <small style="font-weight:600;">Nur möglich, wenn alle Scheiben ohne Einsatz einer höheren Leiter erreichbar sind.</small><br><br>
-                  <span style="font-weight:800; display:block; margin-bottom:18px;" id="pkp-glass-price-label">Preis: 2,00 €/m² (beidseitig)</span>
-                  
-                  <div class="extras-box" style="margin-left:0;">
-                    <div class="extras-grid">
-                      <div class="extra-row">
-                        <div class="extra-info">
-                          <span class="extra-label-text">m² Fläche Gesamt:</span>
-                        </div>
-                        <div class="extra-counter-wrap">
-                          <input type="number" id="pkp-wg-m2-input" min="0" value="0" inputmode="numeric">
-                        </div>
-                      </div>
-                      <div class="extra-row">
-                        <div class="extra-info">
-                          <span class="extra-label-text">Davon mit Sprossen:</span>
-                        </div>
-                        <div class="extra-counter-wrap">
-                          <span class="extra-amount-box" id="pkp-wg-sprossen-amount">+0,00 €</span>
-                          <input type="number" id="pkp-wg-sprossen-slider" min="0" max="0" value="0" step="1" inputmode="numeric">
                         </div>
                       </div>
                     </div>
@@ -504,7 +462,7 @@
       <div class="result-total" id="pkp-result-total">0,00 €</div>
     </div>
     <div class="result-breakdown" id="pkp-result-breakdown"></div>
-    <p class="result-empty" id="pkp-result-empty">Bitte geben Sie mindestens ein Fenster oder Glasflächen an.</p>
+    <p class="result-empty" id="pkp-result-empty">Bitte geben Sie mindestens ein Fenster an.</p>
   </div>
 
               <button type="button" class="pk-to-form-btn" id="pkp-to-form-btn" style="display: block; width: 100%; max-width: 500px; margin: 30px auto 0 auto; padding: 16px 24px; font-size: 1.15rem; font-weight: 700; text-align: center; color: #ffffff; background-color: #0073e6; border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 12px rgba(0, 115, 230, 0.3); transition: transform 0.2s ease, background-color 0.2s ease;">Preis übernehmen &amp; zum Kontaktformular</button>
