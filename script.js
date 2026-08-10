@@ -58,8 +58,6 @@ function pkSyncDisplayFromConfig() {
   });
 }
 
-
-
 // ══════════════════════════════════════════════════════════════════
 // ⭐ KARTE (LEAFLET)
 // ══════════════════════════════════════════════════════════════════
@@ -495,56 +493,57 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let total = baseTotal + erweitertAufpreis;
 
-    // 1. Übersicht der Fensterarten
+    // 1. Grundpreis mit Einzelpositionen & Gesamt
+    breakdown.push(`<div class="result-heading" style="font-size:1.1rem; font-weight:800; margin-bottom:8px;">Grundpreis:</div>`);
+
     PK_CATEGORIES.forEach(cat => {
       const anzahl = catAnzahl[cat];
-      if (anzahl <= 0) return;
       const sumBase = anzahl * PK_PRICES[cat].ein;
       breakdown.push(`<div class="result-row"><span>${PK_PRICES[cat].label} · ${anzahl}× eingetragen</span><span>${pkFormatEuroPlain(sumBase)}</span></div>`);
-      detailsLines.push(`${PK_PRICES[cat].label}: ${anzahl}x (${pkFormatEuroPlain(sumBase)})`);
+      if (anzahl > 0) {
+        detailsLines.push(`${PK_PRICES[cat].label}: ${anzahl}x (${pkFormatEuroPlain(sumBase)})`);
+      }
     });
 
-    // 2. Grundpreis & Reinigungsart
-    if (hasWindows) {
-      breakdown.push(`<div class="result-heading">Grundpreis:</div>`);
-      breakdown.push(`<div class="result-row"><span>Grundpreis gesamt</span><span>${pkFormatEuroPlain(baseTotal)}</span></div>`);
-      if (art === 'erweitert') {
-        breakdown.push(`<div class="result-row"><span>Erweiterte Reinigung (+50%)</span><span>+${pkFormatEuroPlain(erweitertAufpreis)}</span></div>`);
-        detailsLines.push(`Reinigungsart: Erweiterte Reinigung (+${pkFormatEuroPlain(erweitertAufpreis)})`);
-      } else {
-        breakdown.push(`<div class="result-row"><span>Grundreinigung (kein Aufpreis)</span><span>+0,00 €</span></div>`);
-        detailsLines.push(`Reinigungsart: Grundreinigung`);
-      }
+    breakdown.push(`<div class="result-row" style="font-weight:800; border-top:1px solid rgba(0,0,0,0.15); margin-top:6px; padding-top:6px;"><span>Grundpreis gesamt:</span><span>${pkFormatEuroPlain(baseTotal)}</span></div>`);
+
+    // 2. Erweiterte Reinigung (+50%) – Nur wenn ausgewählt
+    if (art === 'erweitert' && baseTotal > 0) {
+      breakdown.push(`<div class="result-row" style="font-weight:700; color:var(--ink); margin-top:12px;"><span>Erweiterte Reinigung (+50%)</span><span>+${pkFormatEuroPlain(erweitertAufpreis)}</span></div>`);
+      detailsLines.push(`Reinigungsart: Erweiterte Reinigung (+${pkFormatEuroPlain(erweitertAufpreis)})`);
+    } else if (hasWindows) {
+      detailsLines.push(`Reinigungsart: Grundreinigung`);
     }
 
-    // 3. Sprossenaufschlag
+    // 3. Sprossen-Zuschlag Einzelpositionen & Gesamt
     let sprossenTotal = 0;
-    const sprossenRows = [];
+    breakdown.push(`<div class="result-heading" style="font-size:1.1rem; font-weight:800; margin-top:16px; margin-bottom:8px;">Sprossen-Zuschlag:</div>`);
+
     PK_CATEGORIES.forEach(cat => {
       const anzahl = catAnzahl[cat];
       const extraEl = document.getElementById(`pkp-${cat}-sprossen`);
       let extra = extraEl ? parseInt(extraEl.value || 0) : 0;
       if (extra > anzahl) extra = anzahl;
+
+      const add = extra * PK_SURCHARGE_AMOUNTS[cat].sprossen;
+      sprossenTotal += add;
+
+      breakdown.push(`<div class="result-row"><span>${PK_PRICES[cat].label} · ${extra}× Sprossen</span><span>+${pkFormatEuroPlain(add)}</span></div>`);
       if (extra > 0) {
-        const add = extra * PK_SURCHARGE_AMOUNTS[cat].sprossen;
-        sprossenTotal += add;
-        sprossenRows.push({ cat, extra, add });
+        detailsLines.push(`${PK_PRICES[cat].label} Sprossen-Zuschlag: ${extra}x (+${pkFormatEuroPlain(add)})`);
       }
     });
-    total += sprossenTotal;
 
-    if (sprossenRows.length > 0) {
-      breakdown.push(`<div class="result-heading">Sprossen-Zuschlag:</div>`);
-      sprossenRows.forEach(r => {
-        breakdown.push(`<div class="result-row"><span>${PK_PRICES[r.cat].label} · ${r.extra}× Sprossen</span><span>+${pkFormatEuroPlain(r.add)}</span></div>`);
-        detailsLines.push(`${PK_PRICES[r.cat].label} Sprossen-Zuschlag: ${r.extra}x (+${pkFormatEuroPlain(r.add)})`);
-      });
-      breakdown.push(`<div class="result-row"><span>Sprossenaufschlag gesamt</span><span>+${pkFormatEuroPlain(sprossenTotal)}</span></div>`);
-    }
+    breakdown.push(`<div class="result-row" style="font-weight:800; border-top:1px solid rgba(0,0,0,0.15); margin-top:6px; padding-top:6px;"><span>Sprossenaufschlag gesamt</span><span>+${pkFormatEuroPlain(sprossenTotal)}</span></div>`);
+
+    total += sprossenTotal;
 
     if (total < PK_MIN_PRICE && hasWindows) {
       total = PK_MIN_PRICE;
     }
+
+    // 4. Gesamtpreis am Ende
+    breakdown.push(`<div class="result-row" style="font-weight:900; font-size:1.3rem; border-top:2px solid var(--ink); margin-top:16px; padding-top:10px;"><span>Gesamtpreis:</span><span>${pkFormatEuroPlain(total)}</span></div>`);
 
     const card = document.getElementById("pkp-result-card");
     const outTotal = document.getElementById("pkp-result-total");
