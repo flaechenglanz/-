@@ -29,26 +29,22 @@ const PK_INPUT_IDS = [
 const PK_CATEGORIES = ["klein", "mittel", "gross"];
 
 // ══════════════════════════════════════════════════════════════════
-// ⭐ HILFSFUNKTIONEN & DISPLAY-SYNC (KORRIGIERT)
+// ⭐ HILFSFUNKTIONEN & DISPLAY-SYNC
 // ══════════════════════════════════════════════════════════════════
 function pkFormatEuroPlain(v) {
   return v.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " €";
 }
 
 function pkSyncDisplayFromConfig() {
-  // 1. Mindestpreis im Hinweis aktualisieren
   const mindest = document.getElementById('pkp-note-mindestpreis');
   if (mindest) mindest.textContent = pkFormatEuroPlain(PK_MIN_PRICE);
 
-  // 2. Grundpreise und Aufpreise der Fenstertypen auf der Seite aktualisieren
   PK_CATEGORIES.forEach(cat => {
-    // Aktualisiert z. B. #pkp-klein-price-label -> "Preis: 2,00 € (beidseitig)"
     const priceLabel = document.getElementById(`pkp-${cat}-price-label`);
     if (priceLabel) {
       priceLabel.textContent = `Preis: ${pkFormatEuroPlain(PK_PRICES[cat].ein)} (beidseitig)`;
     }
 
-    // Aktualisiert die Zuschlags-Anzeigen (+1,00 €, etc.)
     Object.keys(PK_SURCHARGE_LABELS).forEach(key => {
       const amountEl = document.getElementById(`pkp-${cat}-${key}-amount`);
       if (amountEl && PK_SURCHARGE_AMOUNTS[cat][key] !== undefined) {
@@ -221,7 +217,7 @@ function updateSlider(rangeEl, wrapId, handleId) {
 }
 
 // ══════════════════════════════════════════════════════════════════
-// ⭐ REFERENZEN-SLIDESHOW (immer 2 Vorher/Nachher-Bilder sichtbar)
+// ⭐ REFERENZEN-SLIDESHOW
 // ══════════════════════════════════════════════════════════════════
 let baCurrentPage = 0;
 
@@ -267,19 +263,21 @@ function initBaSlideshow() {
 // ══════════════════════════════════════════════════════════════════
 // ⭐ STATUS, SPEICHERN & WIEDERHERSTELLEN
 // ══════════════════════════════════════════════════════════════════
+
+// Aktualisiert den Status-Button auf der Kontaktseite
 function updatePreisStatus() {
   const btn = document.getElementById('pk-status-btn');
   const title = document.getElementById('pk-status-title');
   const sub = document.getElementById('pk-status-sub');
   const icon = document.getElementById('pk-status-icon');
-  const hidden = document.getElementById('preis-ergebnis');
+  const hiddenTotal = document.getElementById('preis-ergebnis');
 
-  if (!btn || !hidden) return;
+  if (!btn) return;
 
-  if (hidden.value && hidden.value.trim() !== '') {
+  if (hiddenTotal && hiddenTotal.value && hiddenTotal.value.trim() !== '') {
     btn.classList.remove('pending');
     btn.classList.add('done');
-    if (title) title.textContent = 'Preis berechnet: ' + hidden.value;
+    if (title) title.textContent = 'Preis berechnet: ' + hiddenTotal.value;
     if (sub) sub.textContent = 'Klicken, um den Preisrechner erneut zu öffnen und Angaben zu ändern';
     if (icon) icon.textContent = '✓';
   } else {
@@ -291,14 +289,14 @@ function updatePreisStatus() {
   }
 }
 
-// Von der Kontaktseite aus zum Preisrechner wechseln (+ Formulardaten speichern)
+// Von der Kontaktseite aus zum Preisrechner wechseln
 function openPreisrechnerFromForm() {
-  saveKontaktForm(); // 👈 Speichert aktuelle Kontaktdaten ab
+  saveKontaktForm();
   sessionStorage.setItem('pkReturnToKontakt', '1');
   window.location.hash = '#preisrechner';
 }
 
-// ---------- Preisrechner Eingaben speichern ----------
+// Preisrechner Eingaben speichern
 function pkSaveInputs() {
   const inputs = {};
   PK_INPUT_IDS.forEach(id => {
@@ -353,13 +351,12 @@ function pkRestoreInputs() {
   }
 }
 
-// ---------- NEW: Kontaktformular Eingaben speichern & wiederherstellen ----------
+// Kontaktformular Eingaben speichern & wiederherstellen
 function saveKontaktForm() {
   const form = document.querySelector('form');
   if (!form) return;
 
   const formData = {};
-  // Speichert automatisch alle Input-, Textarea- und Select-Felder im Formular
   form.querySelectorAll('input, textarea, select').forEach(el => {
     if (el.name && el.type !== 'hidden' && el.type !== 'submit') {
       if (el.type === 'checkbox' || el.type === 'radio') {
@@ -393,6 +390,35 @@ function restoreKontaktForm() {
   } catch(e) {}
 }
 
+// Prüft, ob aus dem Preisrechner übernommene Daten vorliegen
+function applyPendingResult() {
+  const pending = sessionStorage.getItem('pkPendingResult');
+  if (!pending) return;
+
+  try {
+    const data = JSON.parse(pending);
+    
+    // Versteckte Felder im Kontaktformular füllen
+    const hiddenTotal = document.getElementById('preis-ergebnis');
+    const hiddenDetails = document.getElementById('preis-details');
+    if (hiddenTotal) hiddenTotal.value = data.total;
+    if (hiddenDetails) hiddenDetails.value = data.details;
+
+    // Sichtbare Notiz im Formular füllen (falls vorhanden)
+    const noteEl = document.getElementById('form-calc-note');
+    const noteText = document.getElementById('form-calc-text');
+    if (noteEl && noteText) {
+      noteText.innerHTML = `<strong>Übernommene Berechnung (Gesamt: ${data.total}):</strong><br>${data.formattedDetails || data.details}`;
+      noteEl.style.display = 'block';
+    }
+
+    // Status-Button aktualisieren
+    updatePreisStatus();
+  } catch (e) {
+    console.error("Fehler beim Übernehmen des Preises:", e);
+  }
+}
+
 // ══════════════════════════════════════════════════════════════════
 // ⭐ SEITEN-INIT (DOM LOADED)
 // ══════════════════════════════════════════════════════════════════
@@ -406,34 +432,30 @@ document.addEventListener('DOMContentLoaded', function() {
   initScrollReveal();
   initBaSlideshow();
 
-  // Vom Preisrechner übernommenes Ergebnis im Kontaktformular einsetzen
-  const pending = sessionStorage.getItem('pkPendingResult');
-  if (pending) {
-    try {
-      const data = JSON.parse(pending);
-      const hiddenTotal = document.getElementById('preis-ergebnis');
-      const hiddenDetails = document.getElementById('preis-details');
-      if (hiddenTotal) hiddenTotal.value = data.total;
-      if (hiddenDetails) hiddenDetails.value = data.details;
-    } catch (e) {}
-  }
+  // Prüfe auf Preisdaten
+  applyPendingResult();
 
-  // Bereits getätigte Kontaktdaten auf kontakt.html wiederherstellen & Ereignisse sichern
+  // Kontaktformular-Wiederherstellung & Auto-Save
   const kontaktForm = document.querySelector('form');
   if (kontaktForm) {
-    restoreKontaktForm(); // Lädt Daten beim Seitenaufruf zurück
+    restoreKontaktForm();
 
-    // Bei jeder Texteingabe im Kontaktformular automatisch zwischenspeichern
     kontaktForm.addEventListener('input', saveKontaktForm);
     kontaktForm.addEventListener('change', saveKontaktForm);
 
-    // Nach erfolgreichem Absenden den Speicher leeren
     kontaktForm.addEventListener('submit', () => {
       sessionStorage.removeItem('kontaktSavedInputs');
+      sessionStorage.removeItem('pkPendingResult');
     });
   }
 
   updatePreisStatus();
+
+  // Falls per Hash-Wechsel (#kontakt) auf die Seite gesprungen wird
+  window.addEventListener('hashchange', function() {
+    applyPendingResult();
+    updatePreisStatus();
+  });
 });
 
 // ══════════════════════════════════════════════════════════════════
@@ -507,7 +529,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     breakdown.push(`<div class="result-row" style="font-weight:800; border-top:1px solid rgba(0,0,0,0.15); margin-top:6px; padding-top:6px;"><span>Grundpreis gesamt:</span><span>${pkFormatEuroPlain(baseTotal)}</span></div>`);
 
-    // 2. Erweiterte Reinigung (+50%) – Nur wenn ausgewählt
+    // 2. Erweiterte Reinigung (+50%)
     if (art === 'erweitert' && baseTotal > 0) {
       breakdown.push(`<div class="result-row" style="font-weight:700; color:var(--ink); margin-top:12px;"><span>Erweiterte Reinigung (+50%)</span><span>+${pkFormatEuroPlain(erweitertAufpreis)}</span></div>`);
       detailsLines.push(`Reinigungsart: Erweiterte Reinigung (+${pkFormatEuroPlain(erweitertAufpreis)})`);
@@ -542,7 +564,7 @@ document.addEventListener('DOMContentLoaded', function() {
       total = PK_MIN_PRICE;
     }
 
-    // 4. Gesamtpreis am Ende
+    // 4. Gesamtpreis
     breakdown.push(`<div class="result-row" style="font-weight:900; font-size:1.3rem; border-top:2px solid var(--ink); margin-top:16px; padding-top:10px;"><span>Gesamtpreis:</span><span>${pkFormatEuroPlain(total)}</span></div>`);
 
     const card = document.getElementById("pkp-result-card");
@@ -566,22 +588,34 @@ document.addEventListener('DOMContentLoaded', function() {
     if (outBreak) outBreak.innerHTML = breakdown.join("");
     if (empty) empty.style.display = "none";
 
-    pkpLastResult = { total: pkFormatEuroPlain(total), details: detailsLines.join(" | ") };
-    if (toBtn) toBtn.classList.add('visible');
+    // Speichert vollständige Aufschlüsselung für das Formular
+    pkpLastResult = {
+      total: pkFormatEuroPlain(total),
+      details: detailsLines.join(" | "),
+      formattedDetails: breakdown.join("")
+    };
 
+    if (toBtn) toBtn.classList.add('visible');
     if (card) card.scrollIntoView({ behavior: "smooth", block: "center" });
   }
 
   const calcBtn = document.getElementById("pkp-calc-btn");
   if (calcBtn) calcBtn.addEventListener("click", pkCalculatePrice);
 
+  // 🚀 BUTTON: „Übernehmen & zum Formular“
   const toFormBtn = document.getElementById("pkp-to-form-btn");
   if (toFormBtn) {
     toFormBtn.addEventListener("click", function() {
       if (!pkpLastResult) return;
       pkSaveInputs();
+      
+      // Speichere Ergebnis persistent
       sessionStorage.setItem('pkPendingResult', JSON.stringify(pkpLastResult));
-      sessionStorage.removeItem('pkReturnToKontakt');
+
+      // Werte direkt im Kontaktformular eintragen
+      applyPendingResult();
+
+      // Navigiere zum Kontaktformular
       window.location.hash = '#kontakt';
     });
   }
