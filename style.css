@@ -1014,3 +1014,49 @@ img:hover,
 .pk-embed .card:hover .window-item:hover{
   transform: translateY(-3px) scale(1.015);
 }
+
+
+
+
+
+/* ══════════════════════════════════════════════════════════════════
+   Hervorhebung der ausgewählten Reinigungsart (Grund- vs. Erweitert)
+   ══════════════════════════════════════════════════════════════════ */
+
+/* Standard-Zustand der Auswahl-Boxen */
+.pk-type-option, 
+.pk-radio-group label {
+  border: 2px solid var(--c-700, #6DB4E2);
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.25s ease-in-out;
+  display: block;
+  position: relative;
+}
+
+/* Hover-Effekt vor der Auswahl */
+.pk-type-option:hover,
+.pk-radio-group label:hover {
+  border-color: var(--c-500, #2785C8);
+  background-color: var(--c-950, #A3D2F3);
+}
+
+/* 🟢 AKTIVE / AUSGEWÄHLTE BOX (WICHTIGSTE ÄNDERUNG) */
+.pk-type-option:has(input[type="radio"]:checked),
+.pk-radio-group label:has(input[type="radio"]:checked) {
+  border: 3px solid var(--c-300, #155E93) !important; /* Dickerer, dunklerer Rand */
+  background-color: var(--c-800, #BCE0FA) !important; /* Hervorgehobene Hintergrundfarbe */
+  box-shadow: 0 4px 14px rgba(21, 94, 147, 0.25);      /* Deutlicher Schatten */
+  transform: translateY(-2px);                         /* Leichtes Anheben der Box */
+}
+
+/* Optional: Radio-Button selbst etwas vergrößern */
+.pk-type-option input[type="radio"],
+.pk-radio-group input[type="radio"] {
+  accent-color: var(--c-300, #155E93);
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
