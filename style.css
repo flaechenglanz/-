@@ -1014,3 +1014,103 @@ img:hover,
 .pk-embed .card:hover .window-item:hover{
   transform: translateY(-3px) scale(1.015);
 }
+
+
+
+
+
+/* ══════════════════════════════════════════════════════════════════
+   Hervorhebung der ausgewählten Reinigungsart (Grund- vs. Erweitert)
+   ══════════════════════════════════════════════════════════════════ */
+
+/* Standard-Zustand der Auswahl-Boxen */
+.pk-type-option, 
+.pk-radio-group label {
+  border: 2px solid var(--c-700, #6DB4E2);
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.25s ease-in-out;
+  display: block;
+  position: relative;
+}
+
+/* Hover-Effekt vor der Auswahl */
+.pk-type-option:hover,
+.pk-radio-group label:hover {
+  border-color: var(--c-500, #2785C8);
+  background-color: var(--c-950, #A3D2F3);
+}
+
+/* 🟢 AKTIVE / AUSGEWÄHLTE BOX (WICHTIGSTE ÄNDERUNG) */
+.pk-type-option:has(input[type="radio"]:checked),
+.pk-radio-group label:has(input[type="radio"]:checked) {
+  border: 3px solid var(--c-300, #155E93) !important; /* Dickerer, dunklerer Rand */
+  background-color: var(--c-800, #BCE0FA) !important; /* Hervorgehobene Hintergrundfarbe */
+  box-shadow: 0 4px 14px rgba(21, 94, 147, 0.25);      /* Deutlicher Schatten */
+  transform: translateY(-2px);                         /* Leichtes Anheben der Box */
+}
+
+/* Optional: Radio-Button selbst etwas vergrößern */
+.pk-type-option input[type="radio"],
+.pk-radio-group input[type="radio"] {
+  accent-color: var(--c-300, #155E93);
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+
+
+/* ══════════════════════════════════════════════════════════════════
+   EXKLUSIVES & KRASSES HIGHLIGHT FÜR DIE GEWÄHLTE REINIGUNGSART
+   ══════════════════════════════════════════════════════════════════ */
+
+/* Basis-Zustand aller Options-Boxen */
+.pk-embed .pk-type-option {
+  border: 2px solid var(--c-700);
+  background: var(--c-800);
+  border-radius: 16px;
+  padding: 20px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.pk-embed .pk-type-option:hover {
+  border-color: var(--c-400);
+  transform: translateY(-2px);
+}
+
+/* 🚀 KRASSER HIGHLIGHT-ZUSTAND FÜR DIE AUSGEWÄHLTE BOX */
+.pk-embed .pk-type-option:has(input[type="radio"]:checked) {
+  border: 4px solid #0056b3 !important;                       /* Dicker, dunkler Rand */
+  background: linear-gradient(135deg, #a8d5ff 0%, #72b2ea 100%) !important; /* Kräftiges Blau */
+  box-shadow: 0 0 0 4px rgba(0, 86, 179, 0.25), 0 12px 28px rgba(0, 50, 120, 0.35) !important; /* Starker Glow/Schatten */
+  transform: translateY(-4px) scale(1.02) !important;          /* Deutliches Anheben */
+}
+
+/* Sichtbarer Haken in der ausgewählten Box oben rechts */
+.pk-embed .pk-type-option:has(input[type="radio"]:checked)::after {
+  content: "✓ Ausgewählt";
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  background: #0056b3;
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.85rem;
+  padding: 4px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.03em;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* Radio-Button selbst vergrößern */
+.pk-embed .pk-type-option input[type="radio"] {
+  width: 22px;
+  height: 22px;
+  accent-color: #0056b3;
+  cursor: pointer;
+}
