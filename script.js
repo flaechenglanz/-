@@ -6,8 +6,8 @@ const PK_ERWEITERT_PERCENT = 0.5;
 
 const PK_PRICES = {
   klein:  { ein: 2, label: "Kleine Fenster" },
-  mittel: { ein: 3, label: "Mittelgroße Fenster" },
-  gross:  { ein: 4, label: "Große Fenster" }
+  mittel: { ein: 3.5, label: "Mittelgroße Fenster" },
+  gross:  { ein: 5, label: "Große Fenster" }
 };
 
 const PK_SURCHARGE_AMOUNTS = {
