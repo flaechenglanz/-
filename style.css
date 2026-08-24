@@ -844,7 +844,7 @@ img {
   transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease !important;
 }
 
-/* 2. Vergrößerung beim Hovern (inkl. .reveal.is-visible für JavaScript-Kompatibilität) */
+/* 2. Vergrößerung beim Hovern */
 .clean-card:hover, 
 .clean-card-leistungen:hover, 
 .glass-card:hover, 
@@ -858,18 +858,7 @@ img {
 .ba-slider:hover,
 .why-card:hover,
 .about-card:hover,
-img:hover,
-.reveal.is-visible.clean-card:hover,
-.reveal.is-visible.clean-card-leistungen:hover,
-.reveal.is-visible.glass-card:hover,
-.reveal.is-visible.pricecalc-card:hover,
-.reveal.is-visible.social-card:hover,
-.reveal.is-visible.contact-card:hover,
-.reveal.is-visible.ba-card:hover,
-.reveal.is-visible.faq-item:hover,
-.reveal.is-visible.hours-box:hover,
-.reveal.is-visible.map-frame:hover,
-.reveal.is-visible.ba-slider:hover {
+img:hover {
   transform: translateY(-4px) scale(1.025) !important;
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12) !important;
 }

@@ -128,86 +128,6 @@ function buildMap() {
   mapInitialized = true;
 }
 
-// ══════════════════════════════════════════════════════════════════
-// ⭐ SCROLL-REVEAL ANIMATIONEN
-// ══════════════════════════════════════════════════════════════════
-function injectRevealStyles() {
-  if (document.getElementById('reveal-style-element')) return;
-  const style = document.createElement('style');
-  style.id = 'reveal-style-element';
-  style.textContent = `
-    .reveal {
-      opacity: 0;
-      clip-path: inset(-40px 100% -40px -40px);
-      -webkit-clip-path: inset(-40px 100% -40px -40px);
-      transform: translateX(-30px);
-      transition: clip-path .9s cubic-bezier(.25,.75,.35,1),
-                  -webkit-clip-path .9s cubic-bezier(.25,.75,.35,1),
-                  transform .9s cubic-bezier(.25,.75,.35,1),
-                  opacity .4s ease;
-    }
-    .reveal.is-visible {
-      opacity: 1 !important;
-      clip-path: inset(-40px -40px -40px -40px) !important;
-      -webkit-clip-path: inset(-40px -40px -40px -40px) !important;
-      transform: translateX(0) !important;
-    }
-    @media (max-width: 720px) {
-      .reveal {
-        opacity: 1 !important;
-        clip-path: none !important;
-        -webkit-clip-path: none !important;
-        transform: none !important;
-        transition: none !important;
-      }
-    }
-  `;
-  document.head.appendChild(style);
-}
-
-let revealObserver = null;
-
-function applyRevealClasses() {
-  const selectors = [
-    '.clean-card', '.clean-card-leistungen', '.glass-card', '.pricecalc-card',
-    '.social-card', '.contact-card', '.ba-card', '.faq-item', '.ba-slider',
-    '.hours-box', '.map-frame', '.cta-band', '.hero-grid > *', '.why-grid > *',
-    '.about-grid > *', '.clean-grid > *', '.ba-slider-grid > *', '.social-proof-grid > *',
-    '.check-list li', 'section:not(.hero-banner)', 'form'
-  ];
-
-  selectors.forEach(sel => {
-    document.querySelectorAll(sel).forEach(el => {
-      if (!el.closest('header') && !el.closest('footer')) {
-        el.classList.add('reveal');
-      }
-    });
-  });
-}
-
-function initScrollReveal() {
-  injectRevealStyles();
-  applyRevealClasses();
-
-  const elements = document.querySelectorAll('.reveal');
-  if (!elements.length) return;
-
-  if (revealObserver) revealObserver.disconnect();
-
-  elements.forEach(el => el.classList.remove('is-visible'));
-
-  revealObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        revealObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.05, rootMargin: "0px 0px -30px 0px" });
-
-  elements.forEach(el => revealObserver.observe(el));
-}
-
 function updateSlider(rangeEl, wrapId, handleId) {
   const v = rangeEl.value;
   const wrap = document.getElementById(wrapId);
@@ -429,7 +349,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initRadiusMap();
   }
 
-  initScrollReveal();
   initBaSlideshow();
 
   // Prüfe auf Preisdaten
