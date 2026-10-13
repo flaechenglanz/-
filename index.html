@@ -1521,7 +1521,7 @@ img:hover {
         
         <div style="flex: 1;">
           <div class="glass-card contact-card">
-            <p style="color:var(--ink-soft); margin-bottom: 25px;">Prüfen Sie einfach, ob Sie sich im Umkreis von circa 5 km befinden, und geben Sie dann Ihren Namen sowie Ihre Kontaktdaten an und schreiben Sie eine kurze Nachricht:</p>
+            <p style="color:var(--ink-soft); margin-bottom: 25px;">Prüfen Sie einfach, ob Sie sich im Umkreis von circa 10 km befinden, und geben Sie dann Ihren Namen sowie Ihre Kontaktdaten an und schreiben Sie eine kurze Nachricht:</p>
 
             <form action="https://api.web3forms.com/submit" method="POST">
               <input type="hidden" name="access_key" value="fd33b441-0dfe-420f-97c4-08a929ab825f">
@@ -1606,6 +1606,12 @@ img:hover {
                   Samstags &amp; Sonntags: ab 12:00 Uhr
                 </p>
               </div>
+              <div>
+                <strong style="display: block; color: var(--ink-main, #1e293b); font-size: 0.95rem; margin-bottom: 2px;">Zusätzliche Verfügbarkeit vom 19. bis 30. Oktober 2026:</strong>
+                <p style="color: var(--ink-soft); margin: 0; font-size: 0.9rem; line-height: 1.4;">
+                  Täglich ab 12:00 Uhr
+                </p>
+              </div>
             </div>
           </div>
 
@@ -1632,14 +1638,12 @@ img:hover {
         <p>
           Julien Stralleger<br>
           handelnd unter „Flächenglanz Service"<br>
-          Tonwerkstraße 29<br>
-          32584 Löhne<br>
           Deutschland
         </p>
         <p><strong>Kontakt:</strong><br>Telefon: +49 162 7484659<br>E-Mail: flaechenglanzservice@gmail.com</p>
         <p><strong>Hinweis zur Tätigkeit:</strong><br>
 Flächenglanz Service ist derzeit noch keine angemeldete Gewerbebetrieb, sondern eine im Aufbau befindliche Tätigkeit. Sobald eine Gewerbeanmeldung erfolgt ist, werden die entsprechenden Angaben (Registerdaten, Umsatzsteuer-Identifikationsnummer bzw. Hinweis zur Kleinunternehmerregelung nach § 19 UStG) an dieser Stelle ergänzt.</p>
-        <p><strong>Verantwortlich für den Inhalt nach § 18 Abs. 2 Medienstaatsvertrag (MStV):</strong><br>Julien Stralleger, Anschrift wie oben.</p>
+        <p><strong>Verantwortlich für den Inhalt nach § 18 Abs. 2 Medienstaatsvertrag (MStV):</strong><br>Julien Stralleger.</p>
         <p><strong>Haftungshinweis:</strong><br>Trotz sorgfältiger inhaltlicher Kontrolle übernehme ich keine Haftung für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich.</p>
       </div>
     </div>
@@ -1654,7 +1658,7 @@ Flächenglanz Service ist derzeit noch keine angemeldete Gewerbebetrieb, sondern
 
         <h2>1. Verantwortlicher</h2>
         <p>Verantwortlicher für die Datenverarbeitung auf dieser Website im Sinne der DSGVO ist:<br>
-        Julien Stralleger, handelnd unter „Flächenglanz Service", Tonwerkstraße 29, 32584 Löhne, E-Mail: flaechenglanzservice@gmail.com, Telefon: +49 162 7484659.</p>
+        Julien Stralleger, handelnd unter „Flächenglanz Service", E-Mail: flaechenglanzservice@gmail.com, Telefon: +49 162 7484659.</p>
 
         <h2>2. Allgemeines zur Datenverarbeitung</h2>
         <p>Die Nutzung dieser Website ist in der Regel ohne Angabe personenbezogener Daten möglich. Soweit auf dieser Seite personenbezogene Daten (z. B. Name, Anschrift, E-Mail-Adresse) erhoben werden, erfolgt dies, soweit möglich, stets auf freiwilliger Basis, etwa wenn Sie das Kontaktformular nutzen.</p>
@@ -1795,19 +1799,19 @@ function refreshRadiusMap() {
 }
 
 function buildMap() {
-  const tonwerkstrasseCoords = [52.2045, 8.7011];
-  const map = L.map('radius-map').setView(tonwerkstrasseCoords, 12);
+  const serviceAreaCoords = [52.1999366, 8.6982782];
+  const map = L.map('radius-map').setView(serviceAreaCoords, 12);
   window.radiusMapInstance = map;
 
   L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
     attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EBL, and the GIS User Community'
   }).addTo(map);
 
-  L.circle(tonwerkstrasseCoords, {
+  L.circle(serviceAreaCoords, {
     color: '#1E72AF',
     fillColor: '#88C2EC',
     fillOpacity: 0.35,
-    radius: 5000
+    radius: 10000
   }).addTo(map);
 
   L.Control.geocoder({
