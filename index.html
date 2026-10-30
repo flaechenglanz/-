@@ -1307,6 +1307,16 @@ img:hover {
             </div>
           </div>
         </details>
+        <details class="faq-item">
+          <summary>Wie lange dauert eine Reinigung ?<span class="faq-plus">+</span></summary>
+          <div class="faq-body">
+            <div class="faq-icon" aria-hidden="true">↻</div>
+            <div class="faq-text">
+              <p>Da ich noch dabei bin, weitere praktische Erfahrung zu sammeln, benötige ich für eine Reinigung möglicherweise etwas mehr Zeit als ein erfahrener professioneller Fensterreiniger. Dabei nehme ich mir jedoch bewusst für jedes Fenster die nötige Zeit, denn für mich steht ein gründliches und sauberes Ergebnis an erster Stelle – nicht die Geschwindigkeit.</p>
+              <p>Mir ist wichtig, dass Sie mit dem Ergebnis zufrieden sind!</p>
+            </div>
+          </div>
+        </details>
       </div>
     </div>
   </section>
@@ -1370,7 +1380,7 @@ img:hover {
                     </div>
                     <strong>Kleines Fenster (unter 0,5 m²)</strong>
                   </div>
-                  <span style="font-weight:800; display:block; margin-bottom:18px;" id="pkp-klein-price-label">Preis: 2,00 € (beidseitig)</span>
+                  <span style="font-weight:800; display:block; margin-bottom:18px;" id="pkp-klein-price-label">Preis: 2,50 € (beidseitig)</span>
                   <div class="extras-box">
                     <div class="extras-grid">
                       <div class="extra-row">
@@ -1401,7 +1411,7 @@ img:hover {
                     </div>
                     <strong>Mittelgroßes Fenster (0,5 – 1,5 m²)</strong>
                   </div>
-                  <span style="font-weight:800; display:block; margin-bottom:18px;" id="pkp-mittel-price-label">Preis: 3,00 € (beidseitig)</span>
+                  <span style="font-weight:800; display:block; margin-bottom:18px;" id="pkp-mittel-price-label">Preis: 4,00 € (beidseitig)</span>
                   <div class="extras-box">
                     <div class="extras-grid">
                       <div class="extra-row">
@@ -1432,7 +1442,7 @@ img:hover {
                     </div>
                     <strong>Großes Fenster (über 1,5 m²)</strong>
                   </div>
-                  <span style="font-weight:800; display:block; margin-bottom:18px;" id="pkp-gross-price-label">Preis: 4,00 € (beidseitig)</span>
+                  <span style="font-weight:800; display:block; margin-bottom:18px;" id="pkp-gross-price-label">Preis: 5,50 € (beidseitig)</span>
                   <div class="extras-box">
                     <div class="extras-grid">
                       <div class="extra-row">
@@ -1463,12 +1473,6 @@ img:hover {
                 <h4>Weitere Infos</h4>
                 </div>
                 <details class="faq-item pk-info-item">
-                  <summary>Warum sind die Preise so?<span class="faq-plus">+</span></summary>
-                  <div class="faq-body">
-                    <p>Da ich meinen Service gerade erst aufbaue, biete ich meine Leistungen bewusst am unteren Rand des Marktpreises an. So kann ich mit jedem Auftrag mehr Erfahrung sammeln und meine Arbeit weiter verbessern.</p>
-                  </div>
-                </details>
-                <details class="faq-item pk-info-item">
                   <summary>Wozu ist dieser Rechner?<span class="faq-plus">+</span></summary>
                   <div class="faq-body">
                     <p>Dieser Rechner dient nur dazu, Ihnen eine grobe Vorstellung von den Kosten für eine Reinigung bei Ihnen zu geben und ist deshalb unverbindlich und nicht zwingend was sie vorort zahlen. Der echte Preis kann sowohl nach oben als auch nach unten von diesem Ergebnis abweichen. Vor Beginn des Auftrages schaue ich mir vor Ort noch einmal alles genau an und nenne Ihnen dann einen festen, verbindlichen Preis, bevor ich mit der Arbeit anfange.</p>
@@ -1477,7 +1481,7 @@ img:hover {
                 <details class="faq-item pk-info-item">
                   <summary>Mindestpreis<span class="faq-plus">+</span></summary>
                   <div class="faq-body">
-                    <p>Der Mindestpreis bei jedem Auftrag beträgt <strong id="pkp-note-mindestpreis">30 €</strong> (dies deckt z. B. die Anfahrt und Bereitstellung ab). Sollte Ihre Berechnung darunter liegen, greift automatisch dieser Betrag.</p>
+                    <p>Der Mindestpreis bei jedem Auftrag beträgt <strong id="pkp-note-mindestpreis">40 €</strong> (dies deckt z. B. die Anfahrt und Bereitstellung ab). Sollte Ihre Berechnung darunter liegen, greift automatisch dieser Betrag.</p>
                   </div>
                 </details>
                 <details class="faq-item pk-info-item">
@@ -1720,13 +1724,13 @@ Flächenglanz Service ist derzeit noch keine angemeldete Gewerbebetrieb, sondern
 // ══════════════════════════════════════════════════════════════════
 // ⭐ PREIS-KONFIGURATION
 // ══════════════════════════════════════════════════════════════════
-const PK_MIN_PRICE = 30;
+const PK_MIN_PRICE = 40;
 const PK_ERWEITERT_PERCENT = 0.5;
 
 const PK_PRICES = {
-  klein:  { ein: 2, label: "Kleine Fenster" },
-  mittel: { ein: 3.5, label: "Mittelgroße Fenster" },
-  gross:  { ein: 5, label: "Große Fenster" }
+  klein:  { ein: 2.5, label: "Kleine Fenster" },
+  mittel: { ein: 4, label: "Mittelgroße Fenster" },
+  gross:  { ein: 5.5, label: "Große Fenster" }
 };
 
 const PK_SURCHARGE_AMOUNTS = {
